@@ -4,6 +4,6 @@ import { userRepositoryPrisma } from "../infrastructure/repository/user.reposito
 
 @Injectable()
 export class userUseCases {
-
+    
     constructor(private userRepository: userRepositoryPrisma){}
 }
