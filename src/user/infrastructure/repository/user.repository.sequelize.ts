@@ -4,7 +4,7 @@ import { userRepository } from 'src/user/domian/user.repository';
 import User from '../models/user.models';
 
 @Injectable()
-export class userRepositoryPrisma implements userRepository {
+export class userRepositorySequelize implements userRepository {
 
     async  getUsers(): Promise<userEntity[] | null> {
         const user =await User.findAll()

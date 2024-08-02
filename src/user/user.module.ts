@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import {userController } from './infrastructure/controller/user.controller';
 import { userUseCases } from './application/user.use.cases';
-import { userRepositoryPrisma } from './infrastructure/repository/user.repository.prisma';
+import { userRepositorySequelize } from './infrastructure/repository/user.repository.sequelize';
 
 
 @Module({
   controllers: [userController],
-  providers:[userUseCases,userRepositoryPrisma],
+  providers:[userUseCases,userRepositorySequelize],
   exports:[userUseCases]
 })
 export class UserModule {}

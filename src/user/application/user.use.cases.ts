@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { userRepositoryPrisma } from "../infrastructure/repository/user.repository.prisma";
+import { userRepositorySequelize } from "../infrastructure/repository/user.repository.sequelize";
 import { userEntity } from "../domian/user.entity";
 import { Result } from "src/shared/infrastructure/patternResult/result";
 
 @Injectable()
 export class userUseCases {
     
-    constructor(private userRepository: userRepositoryPrisma){}
+    constructor(private userRepository: userRepositorySequelize){}
 
     async getAllUser(): Promise<Result<userEntity[]>>{
        const user = await this.userRepository.getUsers();
