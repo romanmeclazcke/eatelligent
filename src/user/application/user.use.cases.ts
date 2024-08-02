@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { userRepositoryPrisma } from "../infrastructure/repository/user.repository.prisma";
-import { Result } from "src/shared/result/result";
 import { userEntity } from "../domian/user.entity";
+import { Result } from "src/shared/infrastructure/patternResult/result";
 
 @Injectable()
 export class userUseCases {
