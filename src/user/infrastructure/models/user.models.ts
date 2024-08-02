@@ -19,9 +19,39 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
+  lastName:{
+    type:DataTypes.STRING,
+    allowNull:false
+  },
+  email:{
+    type:DataTypes.STRING,
+    allowNull:false,
+    unique:true
+  },
+  password:{
+    type:DataTypes.STRING,
+    allowNull:false
+  },
+  birthdate:{
+    type:DataTypes.DATEONLY,//sin hora
+    allowNull:false
+  },
+  userName:{
+    type:DataTypes.STRING,
+    allowNull:false,
+    unique:true
+  },
+  biography:{
+    type:DataTypes.STRING(50)
+  },
+  profilePicture:{
+    type:DataTypes.STRING(50),
+    allowNull:false,
+    defaultValue:"hola" //imagen default
+  }
 }, {
   sequelize,
-  tableName: 'Users',
+  tableName: 'User',
   timestamps: true,  // Asegúrate de que timestamps esté configurado según tus necesidades
 });
 
