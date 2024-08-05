@@ -1,11 +1,16 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 
-class User extends Model{
-  declare id:string
-  declare name:string
-  declare createAt:Date
-  declare updateAt:Date
+class User extends Model {
+  declare id: string;
+  declare name: string;
+  declare lastName: string;
+  declare email: string;
+  declare password: string;
+  declare birthdate: Date;
+  declare userName: string;
+  declare biography?: string;
+  declare profilePicture?: string;
 }
 
 User.init({
@@ -33,7 +38,7 @@ User.init({
     allowNull:false
   },
   birthdate:{
-    type:DataTypes.DATEONLY,//sin hora
+    type:DataTypes.DATEONLY,
     allowNull:false
   },
   userName:{
@@ -42,7 +47,8 @@ User.init({
     unique:true
   },
   biography:{
-    type:DataTypes.STRING(50)
+    type:DataTypes.STRING(50),
+    allowNull:true
   },
   profilePicture:{
     type:DataTypes.STRING(50),
