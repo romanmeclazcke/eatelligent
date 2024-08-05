@@ -1,6 +1,11 @@
-export interface userEntity{ 
+export interface userEntity {
     id:string
-    name:string
-    createAt:Date
-    updateAt:Date
-}
+    name: string;
+    lastName: string;
+    email: string;
+    password: string;
+    birthdate: Date; // Usa el formato YYYY-MM-DD
+    userName: string;
+    biography?: string;
+    profilePicture?: string; // Asegúrate de que esto sea un URL si es necesario
+  }
