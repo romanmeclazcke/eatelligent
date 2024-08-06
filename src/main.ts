@@ -14,6 +14,9 @@ async function bootstrap() {
       forbidNonWhitelisted:true //no acepta peticiones con propiedaes que no necesita
     })
   )
+
+  app.setGlobalPrefix('ddddddddapi')
+
   await app.listen(3000);
 }
 bootstrap();
