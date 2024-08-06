@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Req, Res} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Req, Res, UsePipes, ValidationPipe} from '@nestjs/common';
 import { Request,Response } from 'express';
 import { userUseCases } from 'src/user/application/user.use.cases';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
