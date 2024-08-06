@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Req, Res} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Req, Res} from '@nestjs/common';
 import { Request,Response } from 'express';
 import { userUseCases } from 'src/user/application/user.use.cases';
-import { UserCreate } from 'src/user/domian/dto/user.create';
+import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 
 
 
@@ -21,7 +21,7 @@ export class userController {
     }
 
     @Get(':id')
-    async getUserById(@Param('id') id:string, @Req() request:Request, @Res() response:Response){
+    async getUserById(@Param('id',  ParseUUIDPipe) id:string, @Req() request:Request, @Res() response:Response){
       const result = await this.userUseCase.getUserById(id);
       if(result.isSucces){
          response.status(result.statusCode).json({message:result.value,details:true})
@@ -31,7 +31,7 @@ export class userController {
     }
 
     @Post("/new")
-    async createUser(@Body() createUserDto: UserCreate,@Req() request:Request,@Res() response:Response){
+    async createUser(@Body() createUserDto: CreateUserDto,@Req() request:Request,@Res() response:Response){
       const result = await this.userUseCase.createUser(createUserDto);
       if(result.isSucces){
          response.status(result.statusCode).json({message:result.value,details:true})

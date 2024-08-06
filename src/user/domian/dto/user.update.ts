@@ -1,3 +1,3 @@
-export interface UserUpdate{
-    
+export class UpdateUserDto{
+
 }

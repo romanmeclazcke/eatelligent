@@ -2,9 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { userRepositorySequelize } from "../infrastructure/repository/user.repository.sequelize";
 import { UserEntity } from "../domian/user.entity";
 import { Result } from "src/shared/infrastructure/patternResult/result";
-import { UserCreate } from "../domian/dto/user.create";
-import { create } from "domain";
-import User from "../infrastructure/models/user.models";
+import { CreateUserDto } from "../domian/dto/create.user.dto";
+
 
 @Injectable()
 export class userUseCases {
@@ -29,9 +28,9 @@ export class userUseCases {
         }
     }
 
-    async createUser(createUser:UserCreate):Promise<Result<UserEntity|null>>{
+    async createUser(createUser:CreateUserDto):Promise<Result<UserEntity|null>>{
         const emailInUse= await this.userRepository.getUserByEmail(createUser.email);
-
+        
         if(emailInUse){
             return Result.failure("User with email already exists",404);
         }
