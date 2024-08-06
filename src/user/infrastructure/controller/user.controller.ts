@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, Res} from '@nestjs/common';
 import { Request,Response } from 'express';
 import { userUseCases } from 'src/user/application/user.use.cases';
-import { userCreate } from 'src/user/domian/dto/user.create';
+import { UserCreate } from 'src/user/domian/dto/user.create';
 
 
 
@@ -31,7 +31,7 @@ export class userController {
     }
 
     @Post("/new")
-    async createUser(@Body() createUserDto: userCreate,@Req() request:Request,@Res() response:Response){
+    async createUser(@Body() createUserDto: UserCreate,@Req() request:Request,@Res() response:Response){
       const result = await this.userUseCase.createUser(createUserDto);
       if(result.isSucces){
          response.status(result.statusCode).json({message:result.value,details:true})

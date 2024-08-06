@@ -1,3 +1,3 @@
-export interface userUpdate{
+export interface UserUpdate{
     
 }

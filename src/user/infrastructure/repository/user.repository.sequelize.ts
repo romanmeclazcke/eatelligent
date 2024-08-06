@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { userEntity } from 'src/user/domian/user.entity';
+import { UserEntity } from 'src/user/domian/user.entity';
 import { userRepository } from 'src/user/domian/user.repository';
 import User from '../models/user.models';
-import { userCreate } from 'src/user/domian/dto/user.create';
+import { UserCreate } from 'src/user/domian/dto/user.create';
 import e from 'express';
 
 @Injectable()
 export class userRepositorySequelize implements userRepository {
     
     
-    async  getUsers(): Promise<userEntity[] | null> {
+    async  getUsers(): Promise<UserEntity[] | null> {
         const user =await User.findAll()
         return user
     }
     
-    async getUserById(id:string): Promise<userEntity | null> {
+    async getUserById(id:string): Promise<UserEntity | null> {
         return await User.findByPk(id)
     }
     
@@ -32,7 +32,7 @@ export class userRepositorySequelize implements userRepository {
         })
     }
     
-    async createUser(user: userCreate): Promise<userEntity | null> {
+    async createUser(user: UserCreate): Promise<UserEntity | null> {
         try {
             const createdUser = await User.create({
                 ...user, //paso todas las propiedades del objeto user al metodo crete

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { userRepositorySequelize } from "../infrastructure/repository/user.repository.sequelize";
-import { userEntity } from "../domian/user.entity";
+import { UserEntity } from "../domian/user.entity";
 import { Result } from "src/shared/infrastructure/patternResult/result";
-import { userCreate } from "../domian/dto/user.create";
+import { UserCreate } from "../domian/dto/user.create";
 import { create } from "domain";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class userUseCases {
     
     constructor(private userRepository: userRepositorySequelize){}
 
-    async getAllUser(): Promise<Result<userEntity[]|null>>{
+    async getAllUser(): Promise<Result<UserEntity[]|null>>{
        const user = await this.userRepository.getUsers();
         if(user){
             return Result.succes(user,200)
@@ -19,7 +19,7 @@ export class userUseCases {
         }
     }
 
-    async getUserById(id:string):Promise<Result<userEntity|null>>{
+    async getUserById(id:string):Promise<Result<UserEntity|null>>{
         const user = await this.userRepository.getUserById(id);
         if(user){
             return Result.succes(user,200)
@@ -28,7 +28,7 @@ export class userUseCases {
         }
     }
 
-    async createUser(createUser:userCreate):Promise<Result<userEntity|null>>{
+    async createUser(createUser:UserCreate):Promise<Result<UserEntity|null>>{
         const userCreated= await this.userRepository.getUserByEmail(createUser.email);
         console.log(userCreated)
 
