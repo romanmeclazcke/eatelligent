@@ -24,41 +24,42 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  lastName:{
-    type:DataTypes.STRING,
-    allowNull:false
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  email:{
-    type:DataTypes.STRING,
-    allowNull:false,
-    unique:true
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  password:{
-    type:DataTypes.STRING,
-    allowNull:false
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  birthdate:{
-    type:DataTypes.DATEONLY,
-    allowNull:false
+  birthdate: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
   },
-  userName:{
-    type:DataTypes.STRING,
-    allowNull:false,
-    unique:true
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  biography:{
-    type:DataTypes.STRING(50),
-    allowNull:true
+  biography: {
+    type: DataTypes.STRING(50),
+    allowNull: true,
   },
-  profilePicture:{
-    type:DataTypes.STRING(50),
-    allowNull:false,
-    defaultValue:"hola" //imagen default
+  profilePicture: {
+    type: DataTypes.STRING(250),
+    allowNull: true,
   }
 }, {
-  sequelize,
+  sequelize, // Pasar la instancia de sequelize aquí
   tableName: 'User',
-  timestamps: true,  // Asegúrate de que timestamps esté configurado según tus necesidades
+  timestamps: true,  // Esto asegura que se gestionen los campos createdAt y updatedAt
+  indexes: [
+    { unique: true, fields: ['email']},
+    { unique:true, fields:['userName']}
+  ]
 });
 
 export default User;

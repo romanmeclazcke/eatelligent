@@ -3,6 +3,7 @@ import { UserEntity } from 'src/user/domian/user.entity';
 import { userRepository } from 'src/user/domian/user.repository';
 import User from '../models/user.models';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
+import { create } from 'domain';
 
 @Injectable()
 export class userRepositorySequelize implements userRepository {
@@ -19,12 +20,15 @@ export class userRepositorySequelize implements userRepository {
     
     async getUserByEmail(email: string) {
         return await User.findOne({
-            where:{email:email}
+            attributes: ['id'] ,
+            where:{email:email},
+            
         })
     }
     
     async getUserByUserName(userName: string) {
         return await User.findOne({
+            attributes:['id'],
             where:{
                 userName:userName
             }
@@ -34,7 +38,7 @@ export class userRepositorySequelize implements userRepository {
     async createUser(user: CreateUserDto): Promise<UserEntity | null> {
         try {
             const createdUser = await User.create({
-                ...user, //paso todas las propiedades del objeto user al metodo crete
+                ...user, 
                 birthdate: new Date(user.birthdate) // Conversión de string a Date
             });
             return createdUser;
