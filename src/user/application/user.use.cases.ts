@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Res } from "@nestjs/common";
 import { userRepositorySequelize } from "../infrastructure/repository/user.repository.sequelize";
 import { UserEntity } from "../domian/user.entity";
 import { Result } from "src/shared/infrastructure/patternResult/result";
 import { CreateUserDto } from "../domian/dto/create.user.dto";
 import { CloudinaryService } from "src/shared/infrastructure/cloudinary/cloudinary.service";
+import { UpdateUserDto } from "../domian/dto/user.update";
 
 
 
@@ -61,5 +62,15 @@ export class userUseCases {
         }else{
             return Result.failure("Error to create user",500)
         }   
+    }
+
+    async updateUserInformation(updateUser:UpdateUserDto,userId:string):Promise<Result<UserEntity|null>>{
+        const userUpdate = await this.userRepository.updateUserInformation(updateUser,userId);
+
+        if(userUpdate){
+            return Result.succes(userUpdate,200);
+        }
+
+        return Result.failure("User not found",404)
     }
 }
