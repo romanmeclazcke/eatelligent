@@ -57,8 +57,18 @@ export class userRepositorySequelize implements userRepository {
                 }
             }
         )
-        return this.getUserById(id);
+        return this.getUserById(id)
     }
+
+    async updateProfilePicture (file: string, id: string): Promise<UserEntity | null> {
+        const userUpdated = await User.update(
+            {profilePicture:file},
+            {
+                where:{id:id}
+            })
+        return this.getUserById(id)
+    }
+    
     
 
     

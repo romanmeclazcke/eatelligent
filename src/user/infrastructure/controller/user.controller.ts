@@ -90,4 +90,30 @@ export class userController {
       }
         
   }
+
+  @Patch('/update/profile-picture/:id')
+  @UseInterceptors(FileInterceptor('profilePicture'))
+  async updateProfilePicture(
+    @Param('id', ParseUUIDPipe) id: string,
+    @UploadedFile() file: Express.Multer.File, //recibo el archivo subido
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    if(!file){
+       return  res
+          .status(404)
+          .json({ message: "new profile picture cant be null", details: true });
+    }
+    const result = await this.userUseCase.updateProfilePicture(file,id);
+    if (result.isSucces) {
+        res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true });
+      } else {
+        res
+          .status(result.statusCode)
+          .json({ message: result.error, details: true });
+      }
+        
+  }
 }

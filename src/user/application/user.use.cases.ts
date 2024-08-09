@@ -12,16 +12,16 @@ import { UpdateUserDto } from "../domian/dto/user.update";
 export class userUseCases {
     
     constructor(private userRepository: userRepositorySequelize, private cloudinary: CloudinaryService){}
-
+    
     async getAllUser(): Promise<Result<UserEntity[]|null>>{
-       const user = await this.userRepository.getUsers();
+        const user = await this.userRepository.getUsers();
         if(user){
             return Result.succes(user,200)
         }else{
             return  Result.failure("user not found",404)
         }
     }
-
+    
     async getUserById(id:string):Promise<Result<UserEntity|null>>{
         const user = await this.userRepository.getUserById(id);
         if(user){
@@ -38,7 +38,7 @@ export class userUseCases {
             return Result.failure("User with email already exists",404);
         }
         const usernameInUse= await this.userRepository.getUserByUserName(createUser.userName);
-
+        
         if(usernameInUse){
             return Result.failure("User with username already exists",404);
         }
@@ -65,12 +65,32 @@ export class userUseCases {
     }
 
     async updateUserInformation(updateUser:UpdateUserDto,userId:string):Promise<Result<UserEntity|null>>{
-        const userUpdate = await this.userRepository.updateUserInformation(updateUser,userId);
-
-        if(userUpdate){
-            return Result.succes(userUpdate,200);
+        const userUpdated = await this.userRepository.updateUserInformation(updateUser,userId);
+        
+        if(userUpdated){
+            return Result.succes(userUpdated,200);
         }
 
         return Result.failure("User not found",404)
+    }
+
+
+    async updateProfilePicture(file: Express.Multer.File, id: string) {
+        if (file) {
+            try {
+                const uploadResult = await this.cloudinary.uploadImage(file);
+                const profilePictureUrl = uploadResult.url; 
+
+                const userUpdated= await this.userRepository.updateProfilePicture(profilePictureUrl,id)
+
+                if(userUpdated){
+                    return Result.succes(userUpdated,200);
+                }
+                return Result.failure("User not found",404)
+
+            } catch (uploadError) {
+                return Result.failure("Failed to upload image", 500);
+            }
+        }
     }
 }
