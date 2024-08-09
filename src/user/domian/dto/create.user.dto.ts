@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsOptional, IsString } from "class-validator";
+import { IsDate, IsEmail, IsOptional, IsString, MinLength } from "class-validator";
 export class CreateUserDto{
 
     @IsString()
@@ -19,6 +19,7 @@ export class CreateUserDto{
     readonly  birthdate: Date;
 
     @IsString()
+    @MinLength(6, { message: 'userName debe tener al menos 6 caracteres' })
     readonly  userName: string;
 
     
