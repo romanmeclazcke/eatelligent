@@ -4,6 +4,8 @@ import { userRepository } from 'src/user/domian/user.repository';
 import User from '../models/user.models';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 import { create } from 'domain';
+import { UpdateUserDto } from 'src/user/domian/dto/user.update';
+import { where } from 'sequelize';
 
 @Injectable()
 export class userRepositorySequelize implements userRepository {
@@ -47,7 +49,26 @@ export class userRepositorySequelize implements userRepository {
             return null;
         }
     }
+    
+    async updateUserInformation(user: UpdateUserDto,id:string): Promise<UserEntity | null> {
+        const userUpdated= await User.update(user,{
+                where:{
+                    id:id
+                }
+            }
+        )
+        return this.getUserById(id)
+    }
 
+    async updateProfilePicture (file: string, id: string): Promise<UserEntity | null> {
+        const userUpdated = await User.update(
+            {profilePicture:file},
+            {
+                where:{id:id}
+            })
+        return this.getUserById(id)
+    }
+    
     
 
     
