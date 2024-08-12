@@ -9,9 +9,7 @@ import {
   Req,
   Res,
   UploadedFile,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
