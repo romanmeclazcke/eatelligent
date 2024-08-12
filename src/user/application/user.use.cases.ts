@@ -5,13 +5,15 @@ import { Result } from "src/shared/infrastructure/patternResult/result";
 import { CreateUserDto } from "../domian/dto/create.user.dto";
 import { CloudinaryService } from "src/shared/infrastructure/cloudinary/cloudinary.service";
 import { UpdateUserDto } from "../domian/dto/user.update";
+import { AuthService } from "src/shared/infrastructure/auth/auth.service";
+import { create } from "domain";
 
 
 
 @Injectable()
 export class userUseCases {
     
-    constructor(private userRepository: userRepositorySequelize, private cloudinary: CloudinaryService){}
+    constructor(private userRepository: userRepositorySequelize, private cloudinary: CloudinaryService,private readonly authService: AuthService){}
     
     async getAllUser(): Promise<Result<UserEntity[]|null>>{
         const user = await this.userRepository.getUsers();
@@ -43,6 +45,12 @@ export class userUseCases {
             return Result.failure("User with username already exists",404);
         }
 
+        const passwordHashed = await this.authService.hashPassword(createUser.password);
+
+        if(!passwordHashed.isSucces){
+            return Result.failure("Error to hash password",500)
+        }
+
         let profilePictureUrl: string | null = null;
 
         if (file) {
@@ -53,7 +61,7 @@ export class userUseCases {
                 return Result.failure("Failed to upload image", 500);
             }
         }
-        const userWithImage: CreateUserDto = { ...createUser, profilePicture: profilePictureUrl }
+        const userWithImage: CreateUserDto = { ...createUser, profilePicture: profilePictureUrl,password:passwordHashed.value }
         
         const user = await this.userRepository.createUser(userWithImage);
 
