@@ -1,4 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
+import Like from 'src/Like/infrastructure/model/like.model';
 import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
@@ -38,5 +39,4 @@ Post.init(
 );
 
 Post.belongsTo(User,{foreignKey:'userId',targetKey:'id',as:'author'})
-
 export default Post
