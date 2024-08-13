@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize';
 import * as dotenv from 'dotenv';
-import User from 'src/user/infrastructure/models/user.models';
 
 dotenv.config();
 
@@ -11,15 +10,34 @@ export const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: 'mysql',
-  }
+  },
 );
+
 
 export const syncDatabase = async () => {
   try {
-    await sequelize.sync({alter:true});
-    console.log('Base de datos y modelos sincronizados correctamente.');
+
+    sequelize
+      .sync({ alter: true })
+      .then(() => {
+        console.log('Modelos sincronizados correctamente');
+      })
+      .catch((error) => {
+        console.error('Error al sincronizar modelos:', error);
+      });
+
+    sequelize
+      .sync({ alter: true })
+      .then(() => {
+        console.log('Database synchronized');
+      })
+      .catch((error) => {
+        console.error('Error synchronizing database:', error);
+      });
   } catch (error) {
     console.error('Error al sincronizar las bases de datos:', error.message);
-    throw new Error('Error al sincronizar las bases de datos: ' + error.message);
+    throw new Error(
+      'Error al sincronizar las bases de datos: ' + error.message,
+    );
   }
 };
