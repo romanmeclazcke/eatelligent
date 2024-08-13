@@ -3,21 +3,20 @@ import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class Follow extends Model {
-    declare id: string;
-    declare userId: string;
-    declare description?: string;
-    declare image?: string;
+    declare followerId: string;
+    declare followedId: string;
+    declare followedAt: Date;
 }
 
 Follow.init(
   {
     followerId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },
     followedId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },
