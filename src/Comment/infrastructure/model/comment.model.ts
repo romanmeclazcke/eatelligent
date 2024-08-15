@@ -21,11 +21,11 @@ Comment.init(
         primaryKey: true,
       },
     userId: {
-      type: DataTypes.STRING,
+      type:DataTypes.UUID,
       allowNull: false,
     },
     postId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
     },
     comment:{
@@ -45,13 +45,14 @@ Comment.init(
   },
   {
     sequelize, 
-    tableName: 'Comments',
+    tableName: 'Comment',
     timestamps: false,
   },
 );
 
-Comment.belongsTo(User,{foreignKey:'userId',targetKey:'id',as:'userCommentedPost'})
-Comment.belongsTo(Post,{foreignKey:'postId',targetKey:'id',as:'postCommented'})
+Comment.belongsTo(User, { foreignKey: 'userId', targetKey: 'id', as: 'userCommentedPost' });
+//Comment.belongsTo(Post, { foreignKey: 'postId', targetKey: 'id'});
+
 
 
 export default Comment
