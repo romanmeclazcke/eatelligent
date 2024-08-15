@@ -27,15 +27,15 @@ export class commentController{
     }
   }
 
-  @Patch('/new/:userId/post/:postId')
+  @Patch('/edit/:userId/comment/:commentId')
     async updateComment(
     @Body() commentUpdateDto: commentUpdateDto,
     @Param('userId', ParseUUIDPipe) userId: string,
-    @Param('postId', ParseUUIDPipe) postId: string,
+    @Param('commentId', ParseUUIDPipe) commentId: string,
     @Req() request: Request,
     @Res() res: Response,
   ) {
-    const result = await this.commentUseCases.updateComment(userId,postId,commentUpdateDto);
+    const result = await this.commentUseCases.updateComment(userId,commentId,commentUpdateDto);
     if (result.isSucces) {
       res.status(result.statusCode).json({ message: result.value, details: true });
     } else {
