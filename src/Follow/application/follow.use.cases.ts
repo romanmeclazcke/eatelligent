@@ -2,17 +2,18 @@ import { Injectable } from "@nestjs/common";
 import { followRepositorySequelize } from "../infrastructure/repository/follow.repository.sequelize";
 import { Result } from "src/shared/infrastructure/patternResult/result";
 import { followEntity } from "../domain/follow.entity";
+import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 
 @Injectable()
 export class followUseCases{
 
-    constructor(private followRepository: followRepositorySequelize){}
-
+    constructor(private followRepository: followRepositorySequelize, private userRepository: userRepositorySequelize){}
+    
 
 
     async followUser(followerId:string, followedId:string):Promise<Result<followEntity>>{
-        const findFollower=true
-        const findFollowed=true;
+        const findFollower= await this.userRepository.getUserById(followerId);
+        const findFollowed= await this.userRepository.getUserById(followedId);
         
         if(!findFollower||!findFollowed){
             return Result.failure("One of user not exist",404);
@@ -35,8 +36,8 @@ export class followUseCases{
 
     
     async unFollowUser(followerId:string, followedId:string):Promise<Result<number>>{
-        const findFollower=true
-        const findFollowed=true;
+        const findFollower= await this.userRepository.getUserById(followerId);
+        const findFollowed= await this.userRepository.getUserById(followedId);
         
         if(!findFollower||!findFollowed){
             return Result.failure("One of user not exist",404);
