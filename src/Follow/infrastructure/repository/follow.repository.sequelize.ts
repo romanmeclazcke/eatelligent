@@ -25,8 +25,7 @@ export class followRepositorySequelize implements followRepository {
     }
     
     findIfFollow(followerId: string, followedId: string): Promise<followEntity | null> {
-        console.log(followerId,followedId)
-
+       
        return Follow.findOne({
         attributes:['followedAt'],
         where:{
