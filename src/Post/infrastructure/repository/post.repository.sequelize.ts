@@ -17,7 +17,6 @@ export class postRepositorySequelize implements postRepository {
       return []; // No hay usuarios seguidos, entonces no hay posts.
     }
 
-    // Obtener los posts
     const posts = await Post.findAll({
       where: {
         userId: {
@@ -54,7 +53,7 @@ export class postRepositorySequelize implements postRepository {
   }
 
   async getPostById(id: string): Promise<postEntity | null> {
-    throw new Error('Method not implemented.');
+    return await Post.findByPk(id)
   }
   async getPostByUser(userId: string): Promise<postEntity[] | null> {
     return await Post.findAll({
