@@ -5,26 +5,55 @@ import { postRepository } from 'src/Post/domain/post.repository';
 import Post from 'src/Post/infrastructure/model/post.model';
 import { Op } from 'sequelize';
 import User from 'src/user/infrastructure/models/user.models';
+import Follow from 'src/Follow/infrastructure/model/follow.model';
+import Like from 'src/Like/infrastructure/model/like.model';
+import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 
 export class postRepositorySequelize implements postRepository {
   async getPostsFromUsersIFollow(userId: string): Promise<postEntity[] | null> {
-    //    return await Post.findAll({
-    //     where:{
-    //         userId:{
-    //             [Op.in]:this.getUsersIFollow(userId)
-    //         }
-    //     },
-    //     include: [{
-    //     model: User,
-    //     as: 'author', //nombre de la relacion
-    //     attributes: ['id', 'name'],
-    //     }],
-    //    })
-    throw new Error('Method not implemented.');
+    const followedUserIds = await this.getUsersIFollow(userId);
+
+    if (followedUserIds.length === 0) {
+      return []; // No hay usuarios seguidos, entonces no hay posts.
+    }
+
+    const posts = await Post.findAll({
+      where: {
+        userId: {
+          [Op.in]: followedUserIds,
+        },
+      },
+      include: [
+        {
+          model: User,
+          as: 'author',
+          attributes: ['id', 'name'],
+        },
+      ],
+      attributes: [
+        'id',
+        'description',
+        'image',
+        'createdAt',
+        'updatedAt',
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Contar likes para cada post
+    const postsWithLikes = await Promise.all(posts.map(async (post) => {
+      const likeCount = await this.countLikes(post.id);
+      return {
+        ...post.toJSON(),
+        likeCount,
+      };
+    }));
+
+    return postsWithLikes;
   }
 
   async getPostById(id: string): Promise<postEntity | null> {
-    throw new Error('Method not implemented.');
+    return await Post.findByPk(id)
   }
   async getPostByUser(userId: string): Promise<postEntity[] | null> {
     return await Post.findAll({
@@ -70,17 +99,24 @@ export class postRepositorySequelize implements postRepository {
     });
   }
 
-  // async getUsersIFollow(userId: string): string[] {
-  //     throw new Error("Method not implemented.");
-  // }
+  async getUsersIFollow(userId: string): Promise<string[]> {
+    const userIfollow = await Follow.findAll({
+      attributes: ['followedId'],
+      where: {
+        followerId: userId,
+      },
+    });
+    const extractProperties = userIfollow.map((follow) => follow.followedId);
+    return extractProperties;
+  }
 
-  // async countLikes(idPost:string):number {
-  //     return await Likes.Count({   //dejar asi hasta crear entity like
-  //         where:{
-  //             idPost:idPost
-  //         }
-  //     })
-  // }
+  async countLikes(idPost: string): Promise<number> {
+    return await Like.count({
+      where: {
+        postId: idPost,
+      },
+    });
+  }
 
   async findPost(userId: string, id: string): Promise<postEntity | null> {
     return await Post.findOne({

@@ -8,7 +8,7 @@ export class postUpdateDto{
 
     @IsString()
     @IsOptional()
-    readonly  profilePicture?: string;
+    readonly  image?: string;
 
 
 }

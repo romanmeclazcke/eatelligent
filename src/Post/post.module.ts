@@ -12,4 +12,4 @@ import { postRepositorySequelize } from './infrastructure/repository/post.reposi
   exports:[],
   imports:[CloudinaryModule]
 })
-export class UserModule {}
+export class PostModule {}

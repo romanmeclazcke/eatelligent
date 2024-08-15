@@ -8,6 +8,6 @@ export class postCreateDto{
 
     @IsString()
     @IsOptional()
-    readonly  profilePicture?: string;
+    readonly  image?: string;
 
 }
