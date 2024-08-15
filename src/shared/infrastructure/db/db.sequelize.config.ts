@@ -25,15 +25,6 @@ export const syncDatabase = async () => {
       .catch((error) => {
         console.error('Error al sincronizar modelos:', error);
       });
-
-    sequelize
-      .sync({ alter: true })
-      .then(() => {
-        console.log('Database synchronized');
-      })
-      .catch((error) => {
-        console.error('Error synchronizing database:', error);
-      });
   } catch (error) {
     console.error('Error al sincronizar las bases de datos:', error.message);
     throw new Error(
