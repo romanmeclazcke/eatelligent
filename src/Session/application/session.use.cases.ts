@@ -22,7 +22,7 @@ export class sessionUseCases{
         if(!comparePassword.isSucces){
             return Result.failure("Password is incorrect",401);
         }
-        return Result.succes(user,200);
+        return Result.succes(user,200); // implementar jwt
     }
     
 }
