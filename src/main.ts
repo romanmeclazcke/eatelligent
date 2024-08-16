@@ -5,9 +5,9 @@ import { syncDatabase } from './shared/infrastructure/db/db.sequelize.config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  syncDatabase();
   dotenv.config();
   const app = await NestFactory.create(AppModule);
-  syncDatabase();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist:true,

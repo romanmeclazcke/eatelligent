@@ -5,7 +5,7 @@ export class commentUpdateDto{
     
     @IsString()
     @IsOptional()
-    readonly  description?: string;
+    readonly  comment: string;
     
     @IsBoolean()
     @IsOptional()

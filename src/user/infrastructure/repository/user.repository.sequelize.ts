@@ -3,9 +3,7 @@ import { UserEntity } from 'src/user/domian/user.entity';
 import { userRepository } from 'src/user/domian/user.repository';
 import User from '../models/user.models';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
-import { create } from 'domain';
 import { UpdateUserDto } from 'src/user/domian/dto/user.update';
-import { where } from 'sequelize';
 
 @Injectable()
 export class userRepositorySequelize implements userRepository {

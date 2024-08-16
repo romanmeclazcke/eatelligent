@@ -29,6 +29,7 @@ export class commentRepositorySequelize implements commentRepository {
       {
         where: {
           id: commentId,
+          userId: userId,
         },
       },
     );

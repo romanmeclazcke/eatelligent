@@ -7,7 +7,7 @@ import { Op } from 'sequelize';
 import User from 'src/user/infrastructure/models/user.models';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
 import Like from 'src/Like/infrastructure/model/like.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import Comment from 'src/Comment/infrastructure/model/comment.model';
 
 export class postRepositorySequelize implements postRepository {
   async getPostsFromUsersIFollow(userId: string): Promise<postEntity[] | null> {
@@ -28,8 +28,21 @@ export class postRepositorySequelize implements postRepository {
           model: User,
           as: 'author',
           attributes: ['id', 'name'],
-        },
-      ],
+        },{
+          model: Comment,
+          as:'comments',
+          attributes:['id','comment','status','commentedAt'],
+          include: [
+            {
+              model: User,
+              as: 'userCommentedPost', // Asegúrate de usar el alias correcto para el usuario en los comentarios
+              attributes: ['id','userName'], // Incluye el nombre del usuario en los comentarios
+            },
+          ],
+          order:[['commentedAt','DESC']]
+          
+        }
+      ], 
       attributes: [
         'id',
         'description',

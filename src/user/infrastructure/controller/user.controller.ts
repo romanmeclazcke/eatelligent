@@ -31,7 +31,7 @@ export class userController {
     }
   }
 
-  @Get(':id')
+  @Get('/:id')
   async getUserById(
     @Param('id', ParseUUIDPipe) id: string,
     @Req() request: Request,
