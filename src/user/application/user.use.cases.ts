@@ -51,6 +51,7 @@ export class userUseCases {
         }
 
         let profilePictureUrl: string | null = null;
+        //impelemtar verificacion por email
 
         if (file) {
             try {
@@ -82,7 +83,21 @@ export class userUseCases {
     }
 
 
-    async updateProfilePicture(file: Express.Multer.File, id: string) {
+    async updateProfilePicture(file: Express.Multer.File, id: string) :Promise<Result<UserEntity|null>>{
+
+        const user = await this.userRepository.getUserById(id);
+        
+        if (!user) {
+            return Result.failure("User not found",404)
+        }
+
+        if (user.profilePicture) {
+           const result = await this.cloudinary.deleteImage(user.profilePicture);
+           if(!result.isSucces){
+            return Result.failure(result.error,result.statusCode)
+           }
+        }
+
         if (file) {
             try {
                 const uploadResult = await this.cloudinary.uploadImage(file);
