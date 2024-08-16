@@ -13,7 +13,7 @@ export class sessionUseCases{
     async login(loginDto:LoginDto):Promise<Result<UserEntity|null>>{
         const user= await this.sessionRepository.login(loginDto);
 
-        if(!user){
+        if(!user){ //para otri dia si user.validation = false no dejar 
             return Result.failure("User not found",404);
         }
 
