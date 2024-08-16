@@ -6,6 +6,7 @@ import { postUpdateDto } from '../domain/dto/post.update.dto';
 import { postCreateDto } from '../domain/dto/post.create.dto';
 import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
+import { badWordsService } from 'src/shared/infrastructure/IAtext/bad.word.service';
 
 @Injectable()
 export class postUsesCases {
@@ -13,6 +14,7 @@ export class postUsesCases {
     private postRepository: postRepositorySequelize,
     private cloudinary: CloudinaryService,
     private userRepository: userRepositorySequelize,
+    private badWordsServices : badWordsService
   ) {}
 
   async getPostsFromUsersIFollow(
@@ -65,6 +67,12 @@ export class postUsesCases {
     if (!user) {
       return Result.failure('User not found', 404);
     }
+    
+    if(postCreateDto.description){
+        if(await this.badWordsServices.detectBadWords(postCreateDto.description)){
+          return Result.failure("Post contain bad words",404);
+        }  
+    }
 
     let postPictureUrl: string | null = null;
 
@@ -76,6 +84,7 @@ export class postUsesCases {
         return Result.failure('Failed to upload image', 500);
       }
     }
+
 
     const postToCreate: postCreateDto = {
       ...postCreateDto,
@@ -101,6 +110,13 @@ export class postUsesCases {
 
     if (!user) {
       return Result.failure('User not found', 404);
+    }
+
+    
+    if(postUpdateDto.description){
+      if(await this.badWordsServices.detectBadWords(postUpdateDto.description)){
+        return Result.failure("Post contain bad words",404);
+      }  
     }
     let postPictureUrl: string | null = null;
 
