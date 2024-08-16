@@ -11,7 +11,6 @@ export class badWordsService {
     }
 
     async detectBadWords(text: string): Promise<boolean> {
-        // Aunque `isProfane` es síncrono, mantenemos la función asíncrona si es necesario
         const isProfane = this.filter.isProfane(text);
         return isProfane;
     }
