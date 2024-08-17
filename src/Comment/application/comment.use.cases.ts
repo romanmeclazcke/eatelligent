@@ -6,6 +6,7 @@ import { commentEntity } from '../domain/comment.entity';
 import { Result } from 'src/shared/infrastructure/patternResult/result';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { postRepositorySequelize } from 'src/Post/infrastructure/repository/post.repository.sequelize';
+import { badWordsService } from 'src/shared/infrastructure/IAtext/bad.word.service';
 
 @Injectable()
 export class commentUseCases {
@@ -13,6 +14,7 @@ export class commentUseCases {
     private commentRepository: commentRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private postRepository: postRepositorySequelize,
+    private readonly badWordsServices: badWordsService,
   ) {}
 
   async addComment(
@@ -28,10 +30,18 @@ export class commentUseCases {
     const post = await this.postRepository.getPostById(postId);
 
     if (!post) {
-        return Result.failure('Post not found', 404);
+      return Result.failure('Post not found', 404);
     }
-    
-    //aplicar algun filtro de texto con ia
+
+    const badWordsResult = await this.badWordsServices.detectBadWords(
+      commentCreateDto.comment,
+    );
+
+    if (badWordsResult) {
+      //aplciar la traduccion de ingles a español
+      return Result.failure('Comment contains bad words', 400);
+    }
+
     const commentCreated = await this.commentRepository.addComment(
       userId,
       postId,
@@ -67,6 +77,15 @@ export class commentUseCases {
       ...commentUpdateDto,
       status: true,
     };
+
+    const badWordsResult = await this.badWordsServices.detectBadWords(
+      commentUpdateDto.comment,
+    );
+
+    if (badWordsResult) {
+      //aplciar la traduccion de ingles a español
+      return Result.failure('Comment contains bad words', 400);
+    }
     const commentUpdated = await this.commentRepository.updateComment(
       userId,
       commentId,

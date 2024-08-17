@@ -13,7 +13,7 @@ export class sessionUseCases{
     async login(loginDto:LoginDto):Promise<Result<UserEntity|null>>{
         const user= await this.sessionRepository.login(loginDto);
 
-        if(!user){
+        if(!user){ //para otri dia si user.validation = false no dejar 
             return Result.failure("User not found",404);
         }
 
@@ -22,7 +22,7 @@ export class sessionUseCases{
         if(!comparePassword.isSucces){
             return Result.failure("Password is incorrect",401);
         }
-        return Result.succes(user,200);
+        return Result.succes(user,200); // implementar jwt
     }
     
 }

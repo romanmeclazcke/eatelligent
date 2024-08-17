@@ -4,7 +4,10 @@ import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class FavoritePost extends Model {
-  
+    declare id:string
+    declare userId:string
+    declare postId:string
+    declare addedAt:Date
 }
 
 FavoritePost.init({
