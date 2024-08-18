@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class mealCreateDto{
     
@@ -6,7 +6,8 @@ export class mealCreateDto{
     readonly  name: string;
 
     @IsString()
-    readonly image:string
+    @IsOptional()
+    readonly image?:string
     
     @IsString()
     readonly recipe:string
