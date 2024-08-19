@@ -26,7 +26,7 @@ Meal.init(
         type: DataTypes.STRING,
         allowNull: false,
     },
-    image:{
+    mealPicture:{
         type: DataTypes.STRING,
         allowNull: false,
     },
