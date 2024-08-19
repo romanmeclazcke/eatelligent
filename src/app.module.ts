@@ -7,6 +7,7 @@ import { FollowModule } from './Follow/follow.module';
 import { CommentModule } from './Comment/comment.module';
 import { FavoritePostModule } from './FavoritePost/favorite.post.module';
 import { MealModule } from './Meal/meal.module';
+import { ProductModule } from './Product/product.module';
 @Module({
   imports: [
     UserModule,
@@ -16,7 +17,8 @@ import { MealModule } from './Meal/meal.module';
     FollowModule,
     CommentModule,
     FavoritePostModule,
-    MealModule
+    MealModule,
+    ProductModule
   ],
   controllers: [],
   providers: [],

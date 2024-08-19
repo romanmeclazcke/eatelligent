@@ -6,7 +6,7 @@ import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 class Product extends Model {
     declare id: string;
     declare name: string;
-    declare image: string;
+    declare productImage: string;
 }
 
 Product.init(
@@ -21,7 +21,7 @@ Product.init(
         type: DataTypes.STRING,
         allowNull: false,
     },
-    image:{
+    productImage:{
         type: DataTypes.STRING,
         allowNull: false,
     }
