@@ -25,7 +25,7 @@ MealProduct.init(
   },
 );
 
-MealProduct.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id', as: 'ingredient' });
-MealProduct.belongsTo(Meal, { foreignKey: 'mealId', targetKey: 'id', as: 'meal' });
+// MealProduct.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id', as: 'ingredient' });
+// MealProduct.belongsTo(Meal, { foreignKey: 'mealId', targetKey: 'id', as: 'meal' });
 
 export default MealProduct
