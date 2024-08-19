@@ -18,7 +18,7 @@ export class mealController{
         @Res() res: Response,
     ){
         const result = await this.mealUseCases.getMealsByTastes(userId)
-        if (result.isSucces) {
+      if (result.isSucces) {
           return res.status(result.statusCode).json({ message: result.value, details: true });
         }
         res.status(result.statusCode).json({ message: result.error, details: false });
