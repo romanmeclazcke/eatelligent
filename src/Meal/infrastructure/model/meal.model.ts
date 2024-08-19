@@ -26,7 +26,7 @@ Meal.init(
         type: DataTypes.STRING,
         allowNull: false,
     },
-    image:{
+    mealPicture:{
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -62,12 +62,12 @@ Meal.init(
 );
 
 
-Meal.belongsToMany(Product, {
-    through: MealProduct,
-    foreignKey: 'productId',
-    otherKey: 'mealId',
-    as: 'products',
-});
+// Meal.belongsToMany(Product, {
+//     through: MealProduct,
+//     foreignKey: 'productId',
+//     otherKey: 'mealId',
+//     as: 'products',
+// });
 
 
 export default Meal

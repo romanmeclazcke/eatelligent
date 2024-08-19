@@ -1,9 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { likeRepositorySequelize } from "../infrastructure/repository/like.repository.sequelize";
 import { likeEntity } from "../domain/like.entity";
 import { Result } from "src/shared/infrastructure/patternResult/result";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
-import { postRepository } from "src/Post/domain/post.repository";
 import { postRepositorySequelize } from "src/Post/infrastructure/repository/post.repository.sequelize";
 
 
@@ -15,15 +14,19 @@ export class likeUseCases{
 
     async giveLike(userId:string, postId:string):Promise<Result<likeEntity>>{
         const user = await this.userRepository.getUserById(userId);
-        
         if(!user){
             return Result.failure('User not found',404);
         }
         
-        const post = await this.postRepostory.getPostById(postId)
-        
+        const post = await this.postRepostory.getPostById(postId);
         if(!post){
             return Result.failure('Post not found',404);
+        }
+
+        const existLike = await this.likeRepository.findLike(userId,postId);
+
+        if(existLike){
+            return Result.failure("User already gave like",404)
         }
 
         const like = await this.likeRepository.likePost(userId, postId); //REVISAR HAY ERROR
@@ -37,7 +40,6 @@ export class likeUseCases{
     }
 
     async dislikePost(userId:string, postId:string):Promise<Result<number>>{
-        
         const user = await this.userRepository.getUserById(userId);
         
         if(!user){

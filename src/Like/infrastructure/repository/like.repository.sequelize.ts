@@ -5,9 +5,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class likeRepositorySequelize implements likeRepository{
-    
-    
-    
+     
     async likePost(userId: string, postId: string): Promise<likeEntity> {
         return await Like.create({
             userId: userId,
@@ -21,6 +19,15 @@ export class likeRepositorySequelize implements likeRepository{
                 userId: userId,
                 postId: postId
 
+            }
+        })
+    }
+
+    async findLike(userId: string, postId: string): Promise<likeEntity | null> {
+        return await Like.findOne({
+            where:{
+                userId:userId,
+                postId:postId
             }
         })
     }
