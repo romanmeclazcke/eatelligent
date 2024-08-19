@@ -54,7 +54,7 @@ export class favoritePostUseCases{
     async deleteFavoritePost(favoritePostId:string):Promise<Result<string|null>>{
         const favoritePostDeleted= await this.favoritePostRepository.deleteFavoritePost(favoritePostId)
 
-        if(favoritePostDeleted){
+        if(favoritePostDeleted>0){
             return Result.succes("successfully removed",201);
         }
         return Result.failure("Internal server error",500);
