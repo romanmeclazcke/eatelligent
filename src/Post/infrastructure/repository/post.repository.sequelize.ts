@@ -8,6 +8,8 @@ import User from 'src/user/infrastructure/models/user.models';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
 import Like from 'src/Like/infrastructure/model/like.model';
 import Comment from 'src/Comment/infrastructure/model/comment.model';
+import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+
 
 export class postRepositorySequelize implements postRepository {
   async getPostsFromUsersIFollow(userId: string): Promise<postEntity[] | null> {
@@ -17,7 +19,7 @@ export class postRepositorySequelize implements postRepository {
       return []; // No hay usuarios seguidos, entonces no hay posts.
     }
 
-    const posts = await Post.findAll({
+    return await Post.findAll({
       where: {
         userId: {
           [Op.in]: followedUserIds,
@@ -35,34 +37,31 @@ export class postRepositorySequelize implements postRepository {
           include: [
             {
               model: User,
-              as: 'userCommentedPost', // Asegúrate de usar el alias correcto para el usuario en los comentarios
-              attributes: ['id','userName'], // Incluye el nombre del usuario en los comentarios
+              as: 'userCommentedPost',
+              attributes: ['id','userName'], 
             },
           ],
           order:[['commentedAt','DESC']]
           
         }
-      ], 
-      attributes: [
+      ], attributes: [
         'id',
         'description',
         'image',
         'createdAt',
         'updatedAt',
+        [
+          sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM \`Like\`
+            WHERE \`Like\`.postId = Post.id 
+          )`),
+          'likeCount',
+        ],
       ],
+      //al tener problemas dado que la tabla se llama igual que el metodo like de sql tuve que agregar la barra invertida para que like sea un identificador y no una palabra reservada
       order: [['createdAt', 'DESC']],
     });
-
-    // Contar likes para cada post
-    const postsWithLikes = await Promise.all(posts.map(async (post) => {
-      const likeCount = await this.countLikes(post.id);
-      return {
-        ...post.toJSON(),
-        likeCount,
-      };
-    }));
-
-    return postsWithLikes;
   }
 
   async getPostById(id: string): Promise<postEntity | null> {
