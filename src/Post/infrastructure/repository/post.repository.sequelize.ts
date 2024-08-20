@@ -37,8 +37,8 @@ export class postRepositorySequelize implements postRepository {
           include: [
             {
               model: User,
-              as: 'userCommentedPost', // Asegúrate de usar el alias correcto para el usuario en los comentarios
-              attributes: ['id','userName'], // Incluye el nombre del usuario en los comentarios
+              as: 'userCommentedPost',
+              attributes: ['id','userName'], 
             },
           ],
           order:[['commentedAt','DESC']]
@@ -51,7 +51,6 @@ export class postRepositorySequelize implements postRepository {
         'createdAt',
         'updatedAt',
         [
-          // Subconsulta para contar likes
           sequelize.literal(`(
             SELECT COUNT(*)
             FROM \`Like\`
