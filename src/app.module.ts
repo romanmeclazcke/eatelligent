@@ -8,6 +8,7 @@ import { CommentModule } from './Comment/comment.module';
 import { FavoritePostModule } from './FavoritePost/favorite.post.module';
 import { MealModule } from './Meal/meal.module';
 import { ProductModule } from './Product/product.module';
+import { DislikeProduct } from './DislikeProduct/dislike.product.module';
 @Module({
   imports: [
     UserModule,
@@ -18,7 +19,8 @@ import { ProductModule } from './Product/product.module';
     CommentModule,
     FavoritePostModule,
     MealModule,
-    ProductModule
+    ProductModule,
+    DislikeProduct
   ],
   controllers: [],
   providers: [],
