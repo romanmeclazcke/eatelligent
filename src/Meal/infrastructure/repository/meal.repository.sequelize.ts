@@ -7,6 +7,7 @@ import Meal from "../model/meal.model";
 import Product from "src/Product/infrastructure/model/product.model";
 import DislikeProduct from "src/DislikeProduct/infrastructure/model/dislike.product.model";
 import { Op } from 'sequelize';
+import { sequelize } from "src/shared/infrastructure/db/db.sequelize.config";
 
 @Injectable()
 export class mealRepositorySequelize implements mealRepository{
@@ -18,6 +19,7 @@ export class mealRepositorySequelize implements mealRepository{
                 userId: userId
             }
         });
+        console.log(dislikeProducts);
         
 
         if(dislikeProducts.length==0){//no tiene productos que no le gusten entonces retorno todas las comidas
@@ -28,17 +30,19 @@ export class mealRepositorySequelize implements mealRepository{
         const dislikedProductIds = dislikeProducts.map(dislike => dislike.productId);
 
         return await Meal.findAll({
-            include: [{
-                model: Product,
-                attributes: [], // No necesitas los atributos del modelo `Product` aquí
-                through: { attributes: [] },
-                where: {
-                    id: {
-                        [Op.notIn]: dislikedProductIds //revisar error (si el la comida tiene un producto que al usario le gusta la muestra igual aunque tenga otros que no)
-                    }
-                }
-            }]
-        });
+            where: {
+              id: {
+                [Op.notIn]: sequelize.literal(`
+                  (SELECT m.id
+                   FROM Meal m
+                   JOIN MealProduct mp ON m.id = mp.mealId
+                   JOIN Product p ON mp.productId = p.id
+                   WHERE p.id IN (:dislikedProductIds))
+                `),
+              },
+            },
+            replacements: { dislikedProductIds },
+          });
         //obtener todas las comidas que no incluyen productos que al usuario no le gustan.
     }
     async getMealById(mealId: string): Promise<mealEntity | null> {
