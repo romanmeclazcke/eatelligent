@@ -1,6 +1,4 @@
 import { DataTypes, Model } from 'sequelize';
-import Meal from 'src/Meal/infrastructure/model/meal.model';
-import MealProduct from 'src/MealProduct/infrastructure/model/meal.product.model';
 import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 
 class Product extends Model {
@@ -36,13 +34,6 @@ Product.init(
   },
 );
 
-
-Product.belongsToMany(Meal, {
-  through: MealProduct,
-  foreignKey: 'productId',
-  otherKey: 'mealId',
-  as: 'meals',
-});
 
 
 export default Product
