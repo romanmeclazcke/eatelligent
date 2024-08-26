@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class mealCreateDto{
     
@@ -7,7 +7,7 @@ export class mealCreateDto{
 
     @IsString()
     @IsOptional()
-    readonly image?:string
+    readonly mealPicture?:string
     
     @IsString()
     readonly recipe:string
@@ -23,5 +23,10 @@ export class mealCreateDto{
 
     @IsBoolean()
     readonly glutenFree:boolean
+
+
+    @IsArray()
+    @IsUUID('4', { each: true })
+    readonly productsId: string[]
 
 }

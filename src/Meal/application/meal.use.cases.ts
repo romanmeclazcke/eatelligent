@@ -5,8 +5,9 @@ import { mealCreateDto } from '../domain/dto/meal.create.dto';
 import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
+import { Injectable } from '@nestjs/common';
 
-
+@Injectable()
 export class mealUseCases {
   constructor(
     private mealRepository: mealRepositorySequelize,
@@ -14,16 +15,32 @@ export class mealUseCases {
     private cloudinary: CloudinaryService,
   ) {}
 
+  
   async getMealsByTastes(userId: string): Promise<Result<mealEntity[] | null>> {
     const user = await this.userRepository.getUserById(userId);
-
+    
     if (!user) {
       return Result.failure('User not found', 404);
     }
+    const meals= await this.mealRepository.getMealsByTastes(userId);
+
+    if(meals){
+      return Result.succes(meals,200);
+    }
+    return Result.failure("meals not founds",404)
   }
 
+  async getMealById(mealId:string):Promise<Result<mealEntity | null>>{
+    const meal= await this.mealRepository.getMealById(mealId);
+
+    if(meal){
+      return Result.succes(meal,200)
+    }
+    return Result.failure('Meal not found', 404);
+  }
+  
   async deleteMeal(mealId: string): Promise<Result<mealEntity | null>> {
-    const meal = await this.mealRepository.getMealsById(mealId);
+    const meal = await this.mealRepository.getMealById(mealId);
 
     if (!meal) {
       return Result.failure('Meal not found', 404);
@@ -45,27 +62,33 @@ export class mealUseCases {
   ): Promise<Result<mealEntity | null>> {
     let mealImage: string | null = null;
 
-    if (file) {
-      try {
-        const uploadResult = await this.cloudinary.uploadImage(file);
-        mealImage = uploadResult.url;
-      } catch (uploadError) {
-        return Result.failure('Failed to upload image', 500);
-      }
-    }
-
+    // if (file) {
+    //   try {
+    //     const uploadResult = await this.cloudinary.uploadImage(file);
+    //     mealImage = uploadResult.url;
+    //   } catch (uploadError) {
+    //     return Result.failure('Failed to upload image', 500);
+    //   }
+    // }
+    
     const mealToCreate: mealCreateDto = {
       ...mealCreateDto,
-      image: mealImage,
+      mealPicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh6cOMOl7iTHblduozB1vGzuBXw4uU0iQMVw&s",
     };
 
-    const meal = await this.mealRepository.createMeals(mealToCreate);
+    // Aquí, `createMeals` debe crear una nueva comida y devolver la instancia creada
+    const meal = await this.mealRepository.createMeal(mealToCreate);
+    console.log(meal)
 
     if (meal) {
+      // Si se proporcionan IDs de productos, asocia los productos con la comida
+      if (mealCreateDto.productsId && mealCreateDto.productsId.length > 0) {
+          await meal.addProducts(mealCreateDto.productsId)
+      }
       return Result.succes(meal, 201);
     }
 
-    return Result.failure('Internal srever error', 500);
+    return Result.failure('Internal server error', 500);
   }
 
   async updateMeal(

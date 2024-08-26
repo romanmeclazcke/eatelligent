@@ -12,7 +12,7 @@ class DislikeProduct extends Model {
 DislikeProduct.init({
   id: {
     type: DataTypes.UUID, 
-    defaultValue: DataTypes.UUIDV4, 
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
     primaryKey: true,
   },
@@ -31,6 +31,9 @@ DislikeProduct.init({
   }
 );
 
+
+DislikeProduct.belongsTo(Product,{foreignKey:'productId',targetKey:'id',as:'product'})
 DislikeProduct.belongsTo(User,{foreignKey:'userId',targetKey:'id',as:'user'})
-DislikeProduct.belongsTo(Product,{foreignKey:'productId',targetKey:'id',as:'dislikeProduct'})
+
+
 export default DislikeProduct;

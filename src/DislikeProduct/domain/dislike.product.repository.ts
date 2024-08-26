@@ -5,4 +5,5 @@ export interface dislikeProductRepository{
     getDislikeProduct(userId:string):Promise<dislikeProductEntity[]>
     addDislikeProduct(userId:string, productId:String):Promise<dislikeProductEntity>
     deleteDislikeProduct(userId:string,productId:string):Promise<number>
+    findDislikedProduct(userId:string,productId:string):Promise<dislikeProductEntity|null>
 }

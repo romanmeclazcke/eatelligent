@@ -25,6 +25,20 @@ export class mealController{
 
     }
 
+    @Get('show/:mealId')
+    async getMealById(
+        @Param('mealId', ParseUUIDPipe) mealId: string,
+        @Req() req: Request,
+        @Res() res: Response,
+    ){
+        const result = await this.mealUseCases.getMealById(mealId)
+      if (result.isSucces) {
+          return res.status(result.statusCode).json({ message: result.value, details: true });
+        }
+        res.status(result.statusCode).json({ message: result.error, details: false });
+
+    }
+
     @Delete('/delete/:mealId')
     async dislikePost(
         @Param('mealId', ParseUUIDPipe) mealId: string,
@@ -41,14 +55,14 @@ export class mealController{
 
 
     @Post('/new')
-    @UseInterceptors(FileInterceptor('mealPicture'))
+    //@UseInterceptors(FileInterceptor('mealPicture'))
     async createMeal(
     @Body() mealCreateDto: mealCreateDto,
-    @UploadedFile() file: Express.Multer.File,
+    //@UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const result = await this.mealUseCases.createMeal(mealCreateDto,file);
+    const result = await this.mealUseCases.createMeal(mealCreateDto,undefined);
     if (result.isSucces) {
       res.status(result.statusCode).json({ message: result.value, details: true });
     } else {

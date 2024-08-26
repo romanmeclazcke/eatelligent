@@ -1,5 +1,4 @@
 import { DataTypes, Model } from 'sequelize';
-import MealProduct from 'src/MealProduct/infrastructure/model/meal.product.model';
 import Product from 'src/Product/infrastructure/model/product.model';
 import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
 
@@ -12,6 +11,9 @@ class Meal extends Model {
     declare protein: number
     declare carbohydrates: number
     declare glutenFree:boolean
+    
+    public addProducts!: (productIds: string[]) => Promise<void>; //define method to add product a meal =>The name of method must be the same that sequelize documentacion
+
 }
 
 Meal.init(
@@ -62,12 +64,6 @@ Meal.init(
 );
 
 
-// Meal.belongsToMany(Product, {
-//     through: MealProduct,
-//     foreignKey: 'productId',
-//     otherKey: 'mealId',
-//     as: 'products',
-// });
-
-
+Meal.belongsToMany(Product, { through: "MealProduct" });
+Product.belongsToMany(Meal, { through: "MealProduct" });//establezco la relacion aca  para asegurarme de que la clase product este correctamente incializada
 export default Meal
