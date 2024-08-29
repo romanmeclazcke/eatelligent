@@ -23,13 +23,12 @@ export class SightEngineServices {
         },
       );
     
-      console.log('Response data:', response.data);
+      
       const result =  this.detectProbabilities(response.data)
-      if(result){ //contiene probabilidaddes mayor a 0.5
-        console.log("Contiene contenido inapropiado")
+      if(result){ //contiene probabilidades mayor a 0.5
           return Result.failure("inappropriate content",404);
       }
-      console.log("safaste")
+     
       return Result.succes(true,200)
   
     } catch (error) {
