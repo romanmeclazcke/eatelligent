@@ -93,10 +93,10 @@ export class userUseCases {
         }
 
         if (user.profilePicture) {
-           const result = await this.cloudinary.deleteImage(user.profilePicture);
-           if(!result.isSucces){
-            return Result.failure(result.error,result.statusCode)
-           }
+        //    const result = await this.cloudinary.deleteImage(user.profilePicture); //hay error
+        //    if(!result.isSucces){
+        //     return Result.failure(result.error,result.statusCode)
+        //    }
         }
 
         if (file) {
