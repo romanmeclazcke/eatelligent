@@ -6,13 +6,14 @@ import { CreateUserDto } from "../domian/dto/create.user.dto";
 import { CloudinaryService } from "src/shared/infrastructure/cloudinary/cloudinary.service";
 import { UpdateUserDto } from "../domian/dto/user.update";
 import { AuthService } from "src/shared/infrastructure/auth/auth.service";
+import { SightEngineServices } from "src/shared/infrastructure/IAimage/sight.engine.service";
 
 
 
 @Injectable()
 export class userUseCases {
     
-    constructor(private userRepository: userRepositorySequelize, private cloudinary: CloudinaryService,private readonly authService: AuthService){}
+    constructor(private userRepository: userRepositorySequelize, private cloudinary: CloudinaryService,private readonly authService: AuthService, private imageServices: SightEngineServices){}
     
     async getAllUser(): Promise<Result<UserEntity[]|null>>{
         const user = await this.userRepository.getUsers();
@@ -101,7 +102,16 @@ export class userUseCases {
         if (file) {
             try {
                 const uploadResult = await this.cloudinary.uploadImage(file);
-                const profilePictureUrl = uploadResult.url; 
+                const profilePictureUrl = uploadResult.url;
+
+                  const resultDetection=await this.imageServices.detectImage(profilePictureUrl); 
+                  
+                    console.log("hellow"+resultDetection.isSucces)
+                
+                 if(!resultDetection.isSucces){ //si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+                    this.cloudinary.deleteImage(profilePictureUrl);
+                    return Result.failure("prohibited content",406);
+                }
 
                 const userUpdated= await this.userRepository.updateProfilePicture(profilePictureUrl,id)
 
