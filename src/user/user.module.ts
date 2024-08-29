@@ -4,12 +4,14 @@ import { userUseCases } from './application/user.use.cases';
 import { userRepositorySequelize } from './infrastructure/repository/user.repository.sequelize';
 import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinary.module';
 import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
+import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
+import { HttpModule, HttpService } from '@nestjs/axios';
 
 
 @Module({
   controllers: [userController],
-  providers:[userUseCases,userRepositorySequelize,AuthService],
+  providers:[userUseCases,userRepositorySequelize,AuthService,SightEngineServices],
   exports:[userUseCases],
-  imports:[CloudinaryModule]
+  imports:[CloudinaryModule,HttpModule]
 })
 export class UserModule {}
