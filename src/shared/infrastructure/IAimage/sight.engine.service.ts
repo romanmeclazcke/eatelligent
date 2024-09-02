@@ -9,7 +9,7 @@ export class SightEngineServices {
   constructor() {}
   async detectImage(imageUrl: string): Promise<Result<boolean>> {
     try {
-      // Realiza la solicitud POST
+      
       const response = await axios.get(
         'https://api.sightengine.com/1.0/check.json',
         {
@@ -52,7 +52,7 @@ export class SightEngineServices {
     ));
     
     const weapon = (data.weapon && (
-        data.weapon.classes.firearm > 0.5 ||
+        data.weapon.classes.firearm > 0.5 || //ver donde poner la constante si aca o en otro archivo
         data.weapon.classes.knife > 0.5
     ));
     
