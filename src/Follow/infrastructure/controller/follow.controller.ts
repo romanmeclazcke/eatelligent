@@ -1,6 +1,7 @@
 import {
   Controller,
   Delete,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
@@ -44,6 +45,43 @@ export class followController {
       followerId,
       followedId,
     );
+    if (result.isSucces) {
+      res
+        .status(result.statusCode)
+        .json({ message: result.value, details: true });
+    } else {
+      res
+        .status(result.statusCode)
+        .json({ message: result.error, details: false });
+    }
+  }
+
+  
+  @Get('followers/:userId')
+  async getListOfFollowers(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const result = await this.followUseCases.getListOfFollowers(userId);
+    if (result.isSucces) {
+      res
+        .status(result.statusCode)
+        .json({ message: result.value, details: true });
+    } else {
+      res
+        .status(result.statusCode)
+        .json({ message: result.error, details: false });
+    }
+  }
+
+  @Get('followers/:userId')
+  async getListOfFolloweds(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const result = await this.followUseCases.getListOfFolloweds(userId);
     if (result.isSucces) {
       res
         .status(result.statusCode)
