@@ -2,9 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { followEntity } from "src/Follow/domain/follow.entity";
 import { followRepository } from "src/Follow/domain/follow.repository";
 import Follow from "../model/follow.model";
+import { Model } from "sequelize";
+import User from "src/user/infrastructure/models/user.models";
 
 @Injectable()
 export class followRepositorySequelize implements followRepository {
+    
     
     
     async followUser(followerId: string, followedId: string): Promise<followEntity | null> {
@@ -34,4 +37,33 @@ export class followRepositorySequelize implements followRepository {
         }
        })
     }
+
+    async getListOfFollowers(userId: string): Promise<followEntity[] | null> {
+        return await Follow.findAll({
+            where: {
+                followedId: userId
+            },
+            include: [{
+                model:User,
+                as:'follower',
+                attributes:['userName']
+            }
+            ]
+        });
+    }
+
+    async getListOfFolloweds(userId:string): Promise<followEntity[] | null> {
+        return await Follow.findAll({
+            where: {
+                followed: userId
+            },
+            include: [{
+                model:User,
+                as:'follower',
+                attributes:['userName']
+            }
+            ]
+        });
+    }
+    
 }
