@@ -25,9 +25,9 @@ export class userController {
   async getUsers(@Req() request: Request, @Res() res: Response) {
     const result = await this.userUseCase.getAllUser();
     if (result.isSucces) {
-      res.status(200).json({ message: result.value });
+      res.status(200).json({ message: result.value, details: true });
     } else {
-      res.status(404).json({ message: result.error });
+      res.status(404).json({ message: result.value, details: false });
     }
   }
 
@@ -45,7 +45,7 @@ export class userController {
     } else {
       res
         .status(result.statusCode)
-        .json({ message: result.error, details: true });
+        .json({ message: result.error, details: false });
     }
   }
 
@@ -65,7 +65,7 @@ export class userController {
     } else {
       res
         .status(result.statusCode)
-        .json({ message: result.error, details: true });
+        .json({ message: result.error, details: false });
     }
   }
 
@@ -84,7 +84,7 @@ export class userController {
       } else {
         res
           .status(result.statusCode)
-          .json({ message: result.error, details: true });
+          .json({ message: result.error, details: false });
       }
         
   }
@@ -110,7 +110,7 @@ export class userController {
       } else {
         res
           .status(result.statusCode)
-          .json({ message: result.error, details: true });
+          .json({ message: result.error, details: false });
       }
         
   }
