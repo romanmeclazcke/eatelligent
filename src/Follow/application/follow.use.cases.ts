@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Res } from "@nestjs/common";
 import { followRepositorySequelize } from "../infrastructure/repository/follow.repository.sequelize";
 import { Result } from "src/shared/infrastructure/patternResult/result";
 import { followEntity } from "../domain/follow.entity";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
+import { find } from "rxjs";
 
 @Injectable()
 export class followUseCases{
@@ -55,5 +56,30 @@ export class followUseCases{
             return Result.succes(followed,201);
         }
         return Result.failure("Internal server error",500)
+    }
+
+    async getListOfFollowers(userId:string):Promise<Result<followEntity[]>>{
+        const findUser = await this.userRepository.getUserById(userId);
+
+        if(!findUser){
+            return Result.failure("User not found",404);
+        }
+
+        const followers = await this.followRepository.getListOfFollowers(userId)
+
+        return Result.succes(followers,200);
+    }
+
+
+    async getListOfFolloweds(userId:string):Promise<Result<followEntity[]>>{
+        const findUser = await this.userRepository.getUserById(userId);
+
+        if(!findUser){
+            return Result.failure("User not found",404);
+        }
+
+        const followers = await this.followRepository.getListOfFolloweds(userId);
+
+        return Result.succes(followers,200);
     }
 }
