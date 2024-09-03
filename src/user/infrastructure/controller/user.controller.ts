@@ -22,7 +22,7 @@ export class userController {
   constructor(private userUseCase: userUseCases) {}
 
   @Get()
-  async getUsers(@Req() request: Request, @Res() res: Response) {
+  async getUsers(@Req() req: Request, @Res() res: Response) {
     const result = await this.userUseCase.getAllUser();
     result.isSucces?
       res.status(result.statusCode).json({ message: result.value, details: true }):
@@ -32,7 +32,7 @@ export class userController {
   @Get('/:id')
   async getUserById(
     @Param('id', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.userUseCase.getUserById(id);
