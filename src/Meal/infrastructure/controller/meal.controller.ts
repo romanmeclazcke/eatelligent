@@ -18,10 +18,9 @@ export class mealController{
         @Res() res: Response,
     ){
         const result = await this.mealUseCases.getMealsByTastes(userId)
-      if (result.isSucces) {
-          return res.status(result.statusCode).json({ message: result.value, details: true });
-        }
-        res.status(result.statusCode).json({ message: result.error, details: false });
+      result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
 
     }
 
@@ -32,10 +31,9 @@ export class mealController{
         @Res() res: Response,
     ){
         const result = await this.mealUseCases.getMealById(mealId)
-      if (result.isSucces) {
-          return res.status(result.statusCode).json({ message: result.value, details: true });
-        }
-        res.status(result.statusCode).json({ message: result.error, details: false });
+      result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
 
     }
 
@@ -46,11 +44,9 @@ export class mealController{
         @Res() res: Response,
       ) {
         const result = await this.mealUseCases.deleteMeal(mealId);
-        if (result.isSucces) {
-          res.status(result.statusCode).json({ message: result.value, details: true });
-        } else {
-          res.status(result.statusCode).json({ message: result.error, details: false });
-        }
+        result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
     }
 
 
@@ -63,11 +59,9 @@ export class mealController{
     @Res() res: Response,
   ) {
     const result = await this.mealUseCases.createMeal(mealCreateDto,undefined);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
       res.status(result.statusCode).json({ message: result.error, details: false });
-    }
   }
 
 
@@ -81,10 +75,8 @@ export class mealController{
     @Res() res: Response,
   ) {
     const result = await this.mealUseCases.updateMeal(mealId,mealUpdateDto,file);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
       res.status(result.statusCode).json({ message: result.error, details: false });
-    }
   }
 }

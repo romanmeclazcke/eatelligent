@@ -16,11 +16,9 @@ export class favoritePostController{
     ){
         const result = await this.favoritePostUseCases.getFavoritePost(userId)
         
-        if (result.isSucces) {
-            res.status(result.statusCode).json({ message: result.value, details: true });
-          } else {
-            res.status(result.statusCode).json({ message: result.error, details: false });
-          }
+        result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
     }
 
 
@@ -33,11 +31,9 @@ export class favoritePostController{
     ){
         const result = await this.favoritePostUseCases.addFavoritePost(userId,postId)
         
-        if (result.isSucces) {
-            res.status(result.statusCode).json({ message: result.value, details: true });
-        } else {
-            res.status(result.statusCode).json({ message: result.error, details: false });
-        }
+        result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
     }
 
     @Delete('/remove/:favoritePostId')
@@ -48,10 +44,8 @@ export class favoritePostController{
     ){
         const result = await this.favoritePostUseCases.deleteFavoritePost(favoritePostId)
         
-        if (result.isSucces) {
-            res.status(result.statusCode).json({ message: result.value, details: true });
-        } else {
-            res.status(result.statusCode).json({ message: result.error, details: false });
-        }
+        result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
     }
 }

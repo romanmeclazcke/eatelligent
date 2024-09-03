@@ -23,15 +23,9 @@ export class followController {
     @Res() res: Response,
   ) {
     const result = await this.followUseCases.followUser(followerId, followedId);
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 
   @Delete('/:followerId/:followedId')
@@ -45,15 +39,9 @@ export class followController {
       followerId,
       followedId,
     );
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 
   
@@ -64,15 +52,9 @@ export class followController {
     @Res() res: Response,
   ) {
     const result = await this.followUseCases.getListOfFollowers(userId);
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 
   @Get('followers/:userId')
@@ -82,14 +64,8 @@ export class followController {
     @Res() res: Response,
   ) {
     const result = await this.followUseCases.getListOfFolloweds(userId);
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 }

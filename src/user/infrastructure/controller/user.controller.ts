@@ -9,7 +9,7 @@ import {
   Req,
   Res,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
@@ -24,9 +24,13 @@ export class userController {
   @Get()
   async getUsers(@Req() req: Request, @Res() res: Response) {
     const result = await this.userUseCase.getAllUser();
-    result.isSucces?
-      res.status(result.statusCode).json({ message: result.value, details: true }):
-      res.status(result.statusCode).json({ message: result.error, details: false });
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Get('/:id')
@@ -36,9 +40,13 @@ export class userController {
     @Res() res: Response,
   ) {
     const result = await this.userUseCase.getUserById(id);
-    result.isSucces?
-      res.status(result.statusCode).json({ message: result.value, details: true }):
-      res.status(result.statusCode).json({ message: result.error, details: false });
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Post('/new')
@@ -50,9 +58,13 @@ export class userController {
     @Res() res: Response,
   ) {
     const result = await this.userUseCase.createUser(createUserDto, file);
-    result.isSucces?
-      res.status(result.statusCode).json({ message: result.value, details: true }):
-      res.status(result.statusCode).json({ message: result.error, details: false });
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Patch('/update/information/:id')
@@ -62,11 +74,17 @@ export class userController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const result = await this.userUseCase.updateUserInformation(updateUserDto,id);
-    result.isSucces?
-      res.status(result.statusCode).json({ message: result.value, details: true }):
-      res.status(result.statusCode).json({ message: result.error, details: false });
-        
+    const result = await this.userUseCase.updateUserInformation(
+      updateUserDto,
+      id,
+    );
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Patch('/update/profile-picture/:id')
@@ -77,16 +95,19 @@ export class userController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    if(!file){
-       return  res
-          .status(404)
-          .json({ message: "new profile picture cant be null", details: true });
+    if (!file) {
+      return res
+        .status(404)
+        .json({ message: 'new profile picture cant be null', details: true });
     }
-    const result = await this.userUseCase.updateProfilePicture(file,id);
-    
-      result.isSucces?
-      res.status(result.statusCode).json({ message: result.value, details: true }):
-      res.status(result.statusCode).json({ message: result.error, details: false });
-        
+    const result = await this.userUseCase.updateProfilePicture(file, id);
+
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 }
