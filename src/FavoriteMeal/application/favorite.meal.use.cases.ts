@@ -67,7 +67,7 @@ export class favoriteMealUseCases {
   async deleteFavoriteMeal(
     userId: string,
     mealId: string,
-  ): Promise<Result<favoriteMealEntity | null>> {
+  ): Promise<Result<String | null>> {
     const user = await this.userRepository.getUserById(userId);
 
     if (!user) {
