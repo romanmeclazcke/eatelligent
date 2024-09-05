@@ -7,6 +7,7 @@ class FavoriteMeal extends Model {
   declare id: string;
   declare userId: string;
   declare mealId: string;
+  declare createdAt:Date
 }
 
 FavoriteMeal.init(
