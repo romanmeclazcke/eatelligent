@@ -25,15 +25,9 @@ export class dislikeProductController {
   ) {
     const result = await this.dislikeProductUseCases.getDislikeProduct(userId);
 
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 
   @Post('add/user/:userId/product/:productId')
@@ -48,15 +42,9 @@ export class dislikeProductController {
       productId,
     );
 
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 
   @Delete('delete/user/:userId/product/:productId')
@@ -71,14 +59,8 @@ export class dislikeProductController {
       productId,
     );
 
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
   }
 }

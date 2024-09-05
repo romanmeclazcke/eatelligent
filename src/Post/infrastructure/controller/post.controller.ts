@@ -25,43 +25,49 @@ export class postController {
   @Get('all/follow/:userId')
   async getPostsFromUsersIFollow(
     @Param('userId', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.postUseCases.getPostsFromUsersIFollow(id);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
-      res.status(result.statusCode).json({ message: result.error, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Get(':id')
   async getPostByID(
     @Param('id', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.postUseCases.getPostById(id);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
-      res.status(result.statusCode).json({ message: result.error, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Get('all/user/:userId')
   async getPostByUser(
     @Param('userId', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.postUseCases.getPostByUser(id);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
-      res.status(result.statusCode).json({ message: result.error, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Post('/new/:userId')
@@ -70,15 +76,17 @@ export class postController {
     @Body() postCreateDto: postCreateDto,
     @UploadedFile() file: Express.Multer.File,
     @Param('userId', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
-    const result = await this.postUseCases.createPost(id,postCreateDto,file);
-    if (result.isSucces) {
-      res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
-      res.status(result.statusCode).json({ message: result.error, details: false });
-    }
+    const result = await this.postUseCases.createPost(id, postCreateDto, file);
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Patch('/edit/:userId/:postId')
@@ -88,7 +96,7 @@ export class postController {
     @UploadedFile() file: Express.Multer.File,
     @Param('userId', ParseUUIDPipe) userId: string,
     @Param('postId', ParseUUIDPipe) postId: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.postUseCases.editPost(
@@ -98,29 +106,29 @@ export class postController {
       file,
     );
 
-    if (result.isSucces) {
-        res.status(result.statusCode).json({ message: result.value, details: true });
-      } else {
-        res.status(result.statusCode).json({ message: result.error, details: false });
-      }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
   @Delete('delete/:userId/:postId')
   async deletePost(
     @Param('userId', ParseUUIDPipe) userId: string,
     @Param('postId', ParseUUIDPipe) postId: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
-    const result = await this.postUseCases.deletePost(
-        userId,
-        postId
-      );
-  
-      if (result.isSucces) {
-          res.status(result.statusCode).json({ message: result.value, details: true });
-        } else {
-          res.status(result.statusCode).json({ message: result.error, details: false });
-        }
+    const result = await this.postUseCases.deletePost(userId, postId);
+
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
-  
 }

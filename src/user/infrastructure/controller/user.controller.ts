@@ -9,7 +9,7 @@ import {
   Req,
   Res,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
@@ -22,31 +22,31 @@ export class userController {
   constructor(private userUseCase: userUseCases) {}
 
   @Get()
-  async getUsers(@Req() request: Request, @Res() res: Response) {
+  async getUsers(@Req() req: Request, @Res() res: Response) {
     const result = await this.userUseCase.getAllUser();
-    if (result.isSucces) {
-      res.status(200).json({ message: result.value, details: true });
-    } else {
-      res.status(404).json({ message: result.value, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Get('/:id')
   async getUserById(
     @Param('id', ParseUUIDPipe) id: string,
-    @Req() request: Request,
+    @Req() req: Request,
     @Res() res: Response,
   ) {
     const result = await this.userUseCase.getUserById(id);
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Post('/new')
@@ -58,15 +58,13 @@ export class userController {
     @Res() res: Response,
   ) {
     const result = await this.userUseCase.createUser(createUserDto, file);
-    if (result.isSucces) {
-      res
-        .status(result.statusCode)
-        .json({ message: result.value, details: true });
-    } else {
-      res
-        .status(result.statusCode)
-        .json({ message: result.error, details: false });
-    }
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
   }
 
   @Patch('/update/information/:id')
@@ -76,17 +74,17 @@ export class userController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const result = await this.userUseCase.updateUserInformation(updateUserDto,id);
-    if (result.isSucces) {
-        res
+    const result = await this.userUseCase.updateUserInformation(
+      updateUserDto,
+      id,
+    );
+    result.isSucces
+      ? res
           .status(result.statusCode)
-          .json({ message: result.value, details: true });
-      } else {
-        res
+          .json({ message: result.value, details: true })
+      : res
           .status(result.statusCode)
           .json({ message: result.error, details: false });
-      }
-        
   }
 
   @Patch('/update/profile-picture/:id')
@@ -97,21 +95,19 @@ export class userController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    if(!file){
-       return  res
-          .status(404)
-          .json({ message: "new profile picture cant be null", details: true });
+    if (!file) {
+      return res
+        .status(404)
+        .json({ message: 'new profile picture cant be null', details: true });
     }
-    const result = await this.userUseCase.updateProfilePicture(file,id);
-    if (result.isSucces) {
-        res
+    const result = await this.userUseCase.updateProfilePicture(file, id);
+
+    result.isSucces
+      ? res
           .status(result.statusCode)
-          .json({ message: result.value, details: true });
-      } else {
-        res
+          .json({ message: result.value, details: true })
+      : res
           .status(result.statusCode)
           .json({ message: result.error, details: false });
-      }
-        
   }
 }

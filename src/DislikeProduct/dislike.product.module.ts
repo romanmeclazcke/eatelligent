@@ -12,4 +12,4 @@ import { productRepositorySequelize } from 'src/Product/infrastructure/repositor
   exports:[],
   imports:[]
 })
-export class DislikeProduct {}
+export class DislikeProductModule {}
