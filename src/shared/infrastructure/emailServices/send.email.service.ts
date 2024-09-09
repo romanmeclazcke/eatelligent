@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { transporter } from './config/nodemailer.connection';
 
+
 @Injectable()
 export class sendEmailServices {
   async sendEmail(
