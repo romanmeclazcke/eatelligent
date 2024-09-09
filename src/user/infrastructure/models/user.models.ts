@@ -11,6 +11,7 @@ class User extends Model {
   declare userName: string;
   declare biography?: string;
   declare profilePicture?: string;
+  declare validateEmail:boolean
 }
 
 User.init({
@@ -51,15 +52,19 @@ User.init({
   profilePicture: {
     type: DataTypes.STRING(250),
     allowNull: true,
+  },
+  validateEmail:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false
   }
 }, {
-  sequelize, // Pasar la instancia de sequelize aquí
+  sequelize,
   tableName: 'User',
   timestamps: true,  // Esto asegura que se gestionen los campos createdAt y updatedAt
   indexes: [
     { unique: true, fields: ['email']},
     { unique:true, fields:['userName']}
-  ]
+  ] //indexo la tabla apartir de estos campos que son unicos
 });
 
 export default User;
