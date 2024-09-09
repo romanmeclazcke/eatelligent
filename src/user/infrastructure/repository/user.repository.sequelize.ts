@@ -41,7 +41,8 @@ export class userRepositorySequelize implements userRepository {
         try {
             const createdUser = await User.create({
                 ...user, 
-                birthdate: new Date(user.birthdate) // Conversión de string a Date
+                birthdate: new Date(user.birthdate), // Conversión de string a Date
+                validateEmail:false
             });
             return createdUser;
         } catch (error) {
