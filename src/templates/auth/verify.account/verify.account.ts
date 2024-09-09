@@ -1,4 +1,4 @@
-export const VERIFY_ACCOUNT = (username: string) => `
+export const VERIFY_ACCOUNT = (username: string,token:string) => `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -58,7 +58,7 @@ export const VERIFY_ACCOUNT = (username: string) => `
         <div class="content">
             <p>¡Hola, ${username}!</p>
             <p>Gracias por registrarte. Por favor, haz clic en el botón de abajo para verificar tu cuenta de correo electrónico:</p>
-            <a href="${process.env.URL_CONFIRM_ACCOUNT}" class="button">Verificar Cuenta</a>
+            <a href="${process.env.URL_CONFIRM_ACCOUNT}?token=${token}" class="button">Verificar Cuenta</a>
         </div>
         <div class="footer">
             <p>Si no creaste esta cuenta, puedes ignorar este correo.</p>
