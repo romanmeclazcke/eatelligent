@@ -6,11 +6,12 @@ import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinar
 import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
 import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
 import { HttpModule, HttpService } from '@nestjs/axios';
+import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.email.service';
 
 
 @Module({
   controllers: [userController],
-  providers:[userUseCases,userRepositorySequelize,AuthService,SightEngineServices],
+  providers:[userUseCases,userRepositorySequelize,AuthService,SightEngineServices,sendEmailServices],
   exports:[userUseCases],
   imports:[CloudinaryModule,HttpModule]
 })
