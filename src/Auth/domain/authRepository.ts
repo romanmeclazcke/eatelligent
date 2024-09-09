@@ -3,5 +3,5 @@ import { loginDto } from "./dto/login.dto";
 
 export interface authRepository{
     validateUser(loginDto:loginDto):Promise<UserEntity|null>;
-    validateAccount(email:string):Promise<number|null>;
+    validateAccount(userId:string):Promise<boolean|null>;
 }

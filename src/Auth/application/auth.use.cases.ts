@@ -30,7 +30,7 @@ export class authUseCases {
     if (!isValidPassword.isSucces) {
       return Result.failure('Invalid password', 500);
     }
-    const payload = { id: user.id, email: user.email };
+    const payload = { id: user.id,name:user.name, email: user.email };
 
     return Result.succes(
       { access_token: await this.jwtService.signAsync(payload) },
@@ -42,7 +42,11 @@ export class authUseCases {
     if (!token)
       return Result.failure('Token is required to verify account', 500);
 
+    console.log(token);
+
     const payload: tokenInterface = await this.jwtService.decode(token);
+
+    console.log(payload);
 
     if (!payload.email)
       return Result.failure('Emails is necesary to verify account', 404);
@@ -51,11 +55,14 @@ export class authUseCases {
       payload.email,
     );
 
+    console.log(user);
+
     if (!user) return Result.failure("User not found",404);
 
     const validated= await this.authRepository.validateAccount(user.id);
-
-    if(validated==0) return Result.failure("Error to validate account",500);
+    console.log(validated);
+    
+    if(!validated) return Result.failure("Error to validate account",500);
 
     return Result.succes(true,200);
  
