@@ -7,6 +7,13 @@ import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudina
 import { UpdateUserDto } from '../domian/dto/user.update';
 import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
 import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
+import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.email.service';
+import {
+  CONST_VERIFY_ACCOUNT_SUBJECT,
+  CONST_VERIFY_ACCOUNT_TEXT,
+} from 'src/templates/auth/verify.account/verify.account.const';
+import { VERIFY_ACCOUNT } from 'src/templates/auth/verify.account/verify.account';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class userUseCases {
@@ -15,6 +22,8 @@ export class userUseCases {
     private cloudinary: CloudinaryService,
     private readonly authService: AuthService,
     private imageServices: SightEngineServices,
+    private emailServices: sendEmailServices,
+    private jwtServices: JwtService
   ) {}
 
   async getAllUser(): Promise<Result<UserEntity[] | null>> {
@@ -82,10 +91,17 @@ export class userUseCases {
     const user = await this.userRepository.createUser(userWithImage);
 
     if (user) {
+      const token= await this.jwtServices.signAsync({ id: user.id,name:user.name, email: user.email });
+      this.emailServices.sendEmail(
+        CONST_VERIFY_ACCOUNT_SUBJECT,
+        VERIFY_ACCOUNT(user.userName,token),
+        user.email,
+        CONST_VERIFY_ACCOUNT_TEXT,
+      );  
+
       return Result.succes(user, 201);
-    } else {
-      return Result.failure('Error to create user', 500);
     }
+    return Result.failure('Error to create user', 500);
   }
 
   async updateUserInformation(
@@ -114,28 +130,28 @@ export class userUseCases {
       return Result.failure('User not found', 404);
     }
 
-    
     if (file) {
       try {
         const uploadResult = await this.cloudinary.uploadImage(file);
         const profilePictureUrl = uploadResult.url;
-        
-        const resultDetection =await this.imageServices.detectImage(profilePictureUrl);
-        
-        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+
+        const resultDetection =
+          await this.imageServices.detectImage(profilePictureUrl);
+
+        if (!resultDetection.isSucces) {
+          //si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
           this.cloudinary.deleteImage(profilePictureUrl);
           return Result.failure('prohibited content', 406);
         }
 
         this.cloudinary.deleteImage(user.profilePicture); //si la imagen es valida ya puedo eliminar su anterior imagen
-        
+
         const userUpdated = await this.userRepository.updateProfilePicture(
           profilePictureUrl,
           id,
         );
-        
+
         if (userUpdated) {
-          
           return Result.succes(userUpdated, 200);
         }
         return Result.failure('User not found', 404);

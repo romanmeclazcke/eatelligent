@@ -24,11 +24,6 @@ export class commentController{
       res.status(result.statusCode).json({ message: result.value, details: true }):
       res.status(result.statusCode).json({ message: result.error, details: false });
 
-
-    result.isSucces?
-    res.status(result.statusCode).json({ message: result.value, details: true }):
-    res.status(result.statusCode).json({ message: result.error, details: false });
-
   }
 
   @Patch('/edit/:userId/comment/:commentId')
@@ -54,11 +49,9 @@ export class commentController{
     @Res() res: Response,
   ) {
     const result = await this.commentUseCases.deleteComment(userId,commentId);
-    if (result.isSucces) {
-    res.status(result.statusCode).json({ message: result.value, details: true });
-    } else {
+    result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
       res.status(result.statusCode).json({ message: result.error, details: false });
-    }
     }
     
 }

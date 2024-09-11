@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsDate, IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import { IsBoolean, IsDate, IsEmail, IsOptional, IsString, MinLength } from "class-validator";
 export class CreateUserDto{
 
     @IsString()
@@ -28,5 +28,4 @@ export class CreateUserDto{
 
     @IsOptional()
     readonly  profilePicture?: string;
-
 }
