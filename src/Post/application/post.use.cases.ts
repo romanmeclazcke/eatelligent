@@ -7,6 +7,7 @@ import { postCreateDto } from '../domain/dto/post.create.dto';
 import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { badWordsService } from 'src/shared/infrastructure/IAtext/bad.word.service';
+import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
 
 @Injectable()
 export class postUsesCases {
@@ -14,7 +15,8 @@ export class postUsesCases {
     private postRepository: postRepositorySequelize,
     private cloudinary: CloudinaryService,
     private userRepository: userRepositorySequelize,
-    private badWordsServices : badWordsService
+    private badWordsServices : badWordsService,
+    private imageServices: SightEngineServices
   ) {}
 
   async getPostsFromUsersIFollow(
@@ -80,6 +82,14 @@ export class postUsesCases {
       try {
         const uploadResult = await this.cloudinary.uploadImage(file);
         postPictureUrl = uploadResult.url;
+
+        const resultDetection =await this.imageServices.detectImage(postPictureUrl); //detecto si la imagen contiene contenido inaporpiado
+
+        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+          this.cloudinary.deleteImage(postPictureUrl); //elimino la imagen
+          return Result.failure('prohibited content', 400);
+        }
+       
       } catch (uploadError) {
         return Result.failure('Failed to upload image', 500);
       }
@@ -124,6 +134,14 @@ export class postUsesCases {
       try {
         const uploadResult = await this.cloudinary.uploadImage(file);
         postPictureUrl = uploadResult.url;
+
+        const resultDetection =await this.imageServices.detectImage(postPictureUrl); //detecto si la imagen contiene contenido inaporpiado
+
+        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+          this.cloudinary.deleteImage(postPictureUrl); //elimino la imagen
+          return Result.failure('prohibited content', 400);
+        }
+       
       } catch (uploadError) {
         return Result.failure('Failed to upload image', 500);
       }
