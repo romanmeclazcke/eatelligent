@@ -44,6 +44,7 @@ export class authUseCases {
         name: user.name,
         email: user.email,
       });
+
       this.emailServices.sendEmail(
         CONST_VERIFY_ACCOUNT_SUBJECT,
         VERIFY_ACCOUNT(user.userName, token),
@@ -68,8 +69,10 @@ export class authUseCases {
     if (!token)
       return Result.failure('Token is required to verify account', 500);
 
-    const payload: tokenInterface =
-      await this.jwtService.verifyAsync(token);
+    const payload: tokenInterface = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
 
     if (!payload.email)
       return Result.failure('Emails is necesary to verify account', 404);
