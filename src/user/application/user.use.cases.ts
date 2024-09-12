@@ -72,12 +72,19 @@ export class userUseCases {
     }
 
     let profilePictureUrl: string | null = null;
-    //impelemtar verificacion por email
 
     if (file) {
       try {
         const uploadResult = await this.cloudinary.uploadImage(file);
         profilePictureUrl = uploadResult.url;
+        
+        const resultDetection =await this.imageServices.detectImage(profilePictureUrl); //detecto si la imagen contiene contenido inaporpiado
+
+        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+          this.cloudinary.deleteImage(profilePictureUrl);
+          return Result.failure('prohibited content', 400);
+        }
+
       } catch (uploadError) {
         return Result.failure('Failed to upload image', 500);
       }
@@ -97,7 +104,7 @@ export class userUseCases {
         VERIFY_ACCOUNT(user.userName,token),
         user.email,
         CONST_VERIFY_ACCOUNT_TEXT,
-      );  
+      );   //envio email de confirmacion
 
       return Result.succes(user, 201);
     }
