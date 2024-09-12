@@ -13,7 +13,7 @@ import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.
     JwtModule.register({
         global: true,
         secret: process.env.JWT_SECRET,
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '60m' },
       }),    
   ],
   controllers:[authController],
