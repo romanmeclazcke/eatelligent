@@ -5,6 +5,7 @@ import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { authUseCases } from './application/auth.use.cases';
+import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.email.service';
 
 
 @Module({
@@ -20,7 +21,8 @@ import { authUseCases } from './application/auth.use.cases';
     authRepositorySequelize,
     AuthService,
     userRepositorySequelize,
-    authUseCases
+    authUseCases,
+    sendEmailServices,
   ],
   exports: [],
 })
