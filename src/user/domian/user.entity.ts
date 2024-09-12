@@ -8,4 +8,5 @@ export interface UserEntity {
     userName: string;
     biography?: string;
     profilePicture?: string; // Asegúrate de que esto sea un URL si es necesario
+    validateEmail:boolean
   }
