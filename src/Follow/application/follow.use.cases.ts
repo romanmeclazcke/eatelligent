@@ -1,6 +1,6 @@
 import { Injectable, Res } from "@nestjs/common";
 import { followRepositorySequelize } from "../infrastructure/repository/follow.repository.sequelize";
-import { Result } from "src/shared/infrastructure/patternResult/result";
+import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { followEntity } from "../domain/follow.entity";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 import { find } from "rxjs";

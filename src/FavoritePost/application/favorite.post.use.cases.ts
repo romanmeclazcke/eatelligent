@@ -1,6 +1,6 @@
 import { Injectable, Res } from "@nestjs/common";
 import { favoritePostRepositorySequelize } from "../infrastructure/repository/favorite.post.repository.prisma";
-import { Result } from "src/shared/infrastructure/patternResult/result";
+import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { favoritePostEntity } from "../domain/favorite.post.entity";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 import { postRepositorySequelize } from "src/Post/infrastructure/repository/post.repository.sequelize";

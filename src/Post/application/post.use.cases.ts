@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { postRepositorySequelize } from '../infrastructure/repository/post.repository.sequelize';
 import { postEntity } from '../domain/post.entity';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { postUpdateDto } from '../domain/dto/post.update.dto';
 import { postCreateDto } from '../domain/dto/post.create.dto';
-import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
-import { badWordsService } from 'src/shared/infrastructure/IAtext/bad.word.service';
-import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
+import { badWordsService } from 'src/Shared/infrastructure/IAtext/bad.word.service';
+import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
 
 @Injectable()
 export class postUsesCases {

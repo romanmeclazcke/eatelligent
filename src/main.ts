@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv'; 
-import { syncDatabase } from './shared/infrastructure/db/db.sequelize.config';
+import { syncDatabase } from './Shared/infrastructure/db/db.sequelize.config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {

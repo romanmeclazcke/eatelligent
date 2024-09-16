@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class Follow extends Model {

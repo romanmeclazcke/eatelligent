@@ -1,6 +1,6 @@
 import { Injectable, Res } from "@nestjs/common";
 import { favoriteMealrepositoySequelize } from "../infrastructure/repository/favorite.meal.respository.sequelize";
-import { Result } from "src/shared/infrastructure/patternResult/result";
+import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { mealEntity } from "src/Meal/domain/meal.entity";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 import { mealRepositorySequelize } from "src/Meal/infrastructure/repository/meal.repository.sequelize";

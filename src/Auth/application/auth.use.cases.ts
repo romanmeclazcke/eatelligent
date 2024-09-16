@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { loginDto } from '../domain/dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
-import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
+import { AuthService } from 'src/Shared/infrastructure/auth/auth.service';
 import { tokenInterface } from '../domain/token.interface';
 import { authRepositorySequelize } from '../infrastructure/repository/auth.repository.sequelize';
-import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.email.service';
+import { sendEmailServices } from 'src/Shared/infrastructure/emailServices/send.email.service';
 import {
   CONST_VERIFY_ACCOUNT_SUBJECT,
   CONST_VERIFY_ACCOUNT_TEXT,
-} from 'src/templates/auth/verify.account/verify.account.const';
-import { VERIFY_ACCOUNT } from 'src/templates/auth/verify.account/verify.account';
+} from 'src/Templates/auth/verify.account/verify.account.const';
+import { VERIFY_ACCOUNT } from 'src/Templates/auth/verify.account/verify.account';
 
 @Injectable()
 export class authUseCases {

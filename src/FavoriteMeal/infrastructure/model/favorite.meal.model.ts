@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import Meal from 'src/Meal/infrastructure/model/meal.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class FavoriteMeal extends Model {

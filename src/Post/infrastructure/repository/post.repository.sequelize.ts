@@ -8,7 +8,7 @@ import User from 'src/user/infrastructure/models/user.models';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
 import Like from 'src/Like/infrastructure/model/like.model';
 import Comment from 'src/Comment/infrastructure/model/comment.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 
 
 export class postRepositorySequelize implements postRepository {

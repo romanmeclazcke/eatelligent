@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
-import { AuthGuardJwt } from 'src/shared/infrastructure/guards/auth.guard.jwt';
+import { AuthGuardJwt } from 'src/Shared/infrastructure/guards/auth.guard.jwt';
 import { userUseCases } from 'src/user/application/user.use.cases';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 import { UpdateUserDto } from 'src/user/domian/dto/user.update';
