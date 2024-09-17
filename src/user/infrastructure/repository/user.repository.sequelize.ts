@@ -16,7 +16,7 @@ export class userRepositorySequelize implements userRepository {
     
     async getUserById(id:string): Promise<UserEntity | null> {
         return await User.findByPk(id,{
-            attributes:['name','lastName','userName','profilePicture']
+            attributes:['name','lastName','userName','profilePicture','validateEmail']
         })
     }
     

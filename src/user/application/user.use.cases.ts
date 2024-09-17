@@ -48,36 +48,33 @@ export class userUseCases {
     createUser: CreateUserDto,
     file: Express.Multer.File,
   ): Promise<Result<UserEntity | null>> {
-    const emailInUse = await this.userRepository.getUserByEmail(
-      createUser.email,
-    );
+    const emailInUse = await this.userRepository.getUserByEmail(createUser.email);
 
-    if (emailInUse) {
-      return Result.failure('User with email already exists', 404);
-    }
-    const usernameInUse = await this.userRepository.getUserByUserName(
-      createUser.userName,
-    );
+    if (emailInUse) return Result.failure('User with email already exists', 404);
+    
+    const usernameInUse = await this.userRepository.getUserByUserName(createUser.userName);
 
-    if (usernameInUse) {
-      return Result.failure('User with username already exists', 404);
-    }
+    if (usernameInUse) return Result.failure('User with username already exists', 404);
+    
 
-    const passwordHashed = await this.authService.hashPassword(
-      createUser.password,
-    );
+    const passwordHashed = await this.authService.hashPassword(createUser.password);
 
-    if (!passwordHashed.isSucces) {
-      return Result.failure('Error to hash password', 500);
-    }
+    if (!passwordHashed.isSucces) return Result.failure('Error to hash password', 500);
+    
 
     let profilePictureUrl: string | null = null;
-    //impelemtar verificacion por email
 
     if (file) {
       try {
         const uploadResult = await this.cloudinary.uploadImage(file);
         profilePictureUrl = uploadResult.url;
+        
+        const resultDetection =await this.imageServices.detectImage(profilePictureUrl); //detecto si la imagen contiene contenido inaporpiado
+
+        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
+          this.cloudinary.deleteImage(profilePictureUrl);
+          return Result.failure('prohibited content', 400);
+        }
       } catch (uploadError) {
         return Result.failure('Failed to upload image', 500);
       }
@@ -97,7 +94,7 @@ export class userUseCases {
         VERIFY_ACCOUNT(user.userName,token),
         user.email,
         CONST_VERIFY_ACCOUNT_TEXT,
-      );  
+      );   //envio email de confirmacion
 
       return Result.succes(user, 201);
     }
