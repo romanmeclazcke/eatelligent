@@ -29,16 +29,16 @@ export class postRepositorySequelize implements postRepository {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'name'],
+          attributes: ['id', 'name','profilePicture'],
         },{
           model: Comment,
           as:'comments',
-          attributes:['id','comment','status','commentedAt'],
+          attributes:['id','comment','status','commentedAt',],
           include: [
             {
               model: User,
               as: 'userCommentedPost',
-              attributes: ['id','userName'], 
+              attributes: ['id','userName','profilePicture'], 
             },
           ],
           order:[['commentedAt','DESC']]
