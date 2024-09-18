@@ -5,7 +5,7 @@ import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 class Meal extends Model {
     declare id: string;
     declare name:string
-    declare image:string
+    declare mealPicture:string
     declare recipe:string
     declare calories: number
     declare protein: number
