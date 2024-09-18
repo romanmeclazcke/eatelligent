@@ -10,6 +10,7 @@ import { ProductModule } from './Product/product.module';
 import { DislikeProductModule } from './DislikeProduct/dislike.product.module';
 import { FavoriteMealModule } from './FavoriteMeal/favorite.meal.module';
 import { AuthModule } from './Auth/auth.module';
+import { HistoryMealModule } from './HistoryMeal/history.meal.module';
 @Module({
   imports: [
     UserModule,
@@ -22,7 +23,8 @@ import { AuthModule } from './Auth/auth.module';
     ProductModule,
     DislikeProductModule,
     FavoriteMealModule,
-    AuthModule
+    AuthModule,
+    HistoryMealModule
   ],
   controllers: [],
   providers: [],
