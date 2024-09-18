@@ -47,7 +47,7 @@ export class mealUseCases {
     }
 
     const mealDeleted = await this.mealRepository.deleteMeal(mealId);
-    this.cloudinary.deleteImage(meal.image); //no necesito que el proceso sea asincronico, realmente no me interesa el resultado
+    this.cloudinary.deleteImage(meal.mealPicture); //no necesito que el proceso sea asincronico, realmente no me interesa el resultado
 
     if (mealDeleted>0) {
       return Result.succes(meal, 200);
