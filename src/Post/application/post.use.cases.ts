@@ -95,7 +95,6 @@ export class postUsesCases {
       }
     }
 
-
     const postToCreate: postCreateDto = {
       ...postCreateDto,
       image: postPictureUrl,
@@ -107,7 +106,7 @@ export class postUsesCases {
       return Result.succes(post, 201);
     }
 
-    return Result.failure('Internal srever error', 500);
+    return Result.failure('Internal server error', 500);
   }
 
   async editPost(
