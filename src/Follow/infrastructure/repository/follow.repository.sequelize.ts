@@ -15,7 +15,7 @@ export class followRepositorySequelize implements followRepository {
             
             followerId:followerId,
             followedId:followedId
-        })
+        }) //show what happend here that sometimes return a error
     }
     
     async unFollowUser(followerId: string, followedId: string): Promise<number | null> {
@@ -46,7 +46,7 @@ export class followRepositorySequelize implements followRepository {
             include: [{
                 model:User,
                 as:'follower',
-                attributes:['userName']
+                attributes:['userName','profilePicture']
             }
             ]
         });
@@ -60,7 +60,9 @@ export class followRepositorySequelize implements followRepository {
             include: [{
                 model:User,
                 as:'follower',
-                attributes:['userName']
+
+                attributes:['userName','profilePicture'] //changed it to know a profile picture
+
             }
             ]
         });

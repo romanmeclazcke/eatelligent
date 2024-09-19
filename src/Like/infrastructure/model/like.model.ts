@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import Post from 'src/Post/infrastructure/model/post.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class Like extends Model {

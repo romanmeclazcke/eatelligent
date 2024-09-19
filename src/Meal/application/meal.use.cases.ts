@@ -1,10 +1,10 @@
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { mealEntity } from '../domain/meal.entity';
 import { mealRepositorySequelize } from '../infrastructure/repository/meal.repository.sequelize';
 import { mealCreateDto } from '../domain/dto/meal.create.dto';
 import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
-import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class mealUseCases {
     }
 
     const mealDeleted = await this.mealRepository.deleteMeal(mealId);
-    this.cloudinary.deleteImage(meal.image); //no necesito que el proceso sea asincronico, realmente no me interesa el resultado
+    this.cloudinary.deleteImage(meal.mealPicture); //no necesito que el proceso sea asincronico, realmente no me interesa el resultado
 
     if (mealDeleted>0) {
       return Result.succes(meal, 200);

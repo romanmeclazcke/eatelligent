@@ -22,7 +22,7 @@ import { postUpdateDto } from 'src/Post/domain/dto/post.update.dto';
 export class postController {
   constructor(private postUseCases: postUsesCases) {}
 
-  @Get('all/follow/:userId')
+  @Get('/all/follow/:userId')
   async getPostsFromUsersIFollow(
     @Param('userId', ParseUUIDPipe) id: string,
     @Req() req: Request,

@@ -8,7 +8,7 @@ import User from 'src/user/infrastructure/models/user.models';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
 import Like from 'src/Like/infrastructure/model/like.model';
 import Comment from 'src/Comment/infrastructure/model/comment.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 
 
 export class postRepositorySequelize implements postRepository {
@@ -22,23 +22,23 @@ export class postRepositorySequelize implements postRepository {
     return await Post.findAll({
       where: {
         userId: {
-          [Op.in]: followedUserIds,
+          [Op.in]: followedUserIds, //find all post from people that user follow
         },
       },
-      include: [
+      include: [ //include model user to recived name id and profile picture
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'name'],
-        },{
+          attributes: ['id', 'name','profilePicture'],
+        },{   //to each post included all comments 
           model: Comment,
           as:'comments',
-          attributes:['id','comment','status','commentedAt'],
-          include: [
+          attributes:['id','comment','status','commentedAt',],
+          include: [ // to each comment included user information
             {
               model: User,
               as: 'userCommentedPost',
-              attributes: ['id','userName'], 
+              attributes: ['id','userName','profilePicture'], 
             },
           ],
           order:[['commentedAt','DESC']]
@@ -50,8 +50,8 @@ export class postRepositorySequelize implements postRepository {
         'image',
         'createdAt',
         'updatedAt',
-        [
-          sequelize.literal(`(
+        [ //cuento el total de likes
+          sequelize.literal(`( 
             SELECT COUNT(*)
             FROM \`Like\`
             WHERE \`Like\`.postId = Post.id 
@@ -65,7 +65,7 @@ export class postRepositorySequelize implements postRepository {
   }
 
   async getPostById(id: string): Promise<postEntity | null> {
-    return await Post.findByPk(id)
+    return await Post.findByPk(id) //TODO: add comments and user infomation to each comments  and count of likes
   }
   async getPostByUser(userId: string): Promise<postEntity[] | null> {
     return await Post.findAll({
@@ -73,6 +73,7 @@ export class postRepositorySequelize implements postRepository {
         userId: userId,
       },
     });
+    //TODO: add comments and user infomation to each comments  and count of likes
   }
   async createPost(
     userId: string,
@@ -111,7 +112,7 @@ export class postRepositorySequelize implements postRepository {
     });
   }
 
-  async getUsersIFollow(userId: string): Promise<string[]> {
+  async getUsersIFollow(userId: string): Promise<string[]> { //removed it and add on follow entity
     const userIfollow = await Follow.findAll({
       attributes: ['followedId'],
       where: {
@@ -120,14 +121,6 @@ export class postRepositorySequelize implements postRepository {
     });
     const extractProperties = userIfollow.map((follow) => follow.followedId);
     return extractProperties;
-  }
-
-  async countLikes(idPost: string): Promise<number> {
-    return await Like.count({
-      where: {
-        postId: idPost,
-      },
-    });
   }
 
   async findPost(userId: string, id: string): Promise<postEntity | null> {

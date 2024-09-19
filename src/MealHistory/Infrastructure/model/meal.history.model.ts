@@ -3,38 +3,48 @@ import Meal from 'src/Meal/infrastructure/model/meal.model';
 import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
-class FavoriteMeal extends Model {
-  declare id: string;
+class MealHistory extends Model {
+  declare id:string
   declare userId: string;
   declare mealId: string;
-  declare createdAt:Date
+  declare updateAt: Date;
+  declare createAt: Date;
 }
 
-FavoriteMeal.init(
+MealHistory.init(
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,  // Usa 'id' como clave primaria
+      allowNull: false,
+      primaryKey: true,
     },
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
+      primaryKey: true,
     },
     mealId: {
       type: DataTypes.UUID,
       allowNull: false,
+      primaryKey: true,
     },
   },
   {
     sequelize,
-    tableName: 'FavoriteMeal',
-    timestamps: true, // Esto manejará `createdAt` y `updatedAt`
+    tableName: 'MealHistory',
+    timestamps: true,
   },
 );
+MealHistory.belongsTo(User, {
+  foreignKey: 'userId',
+  targetKey: 'id',
+  as: 'user',
+});
+MealHistory.belongsTo(Meal, {
+  foreignKey: 'mealId',
+  targetKey: 'id',
+  as: 'meal',
+});
 
-// Asociaciones
-FavoriteMeal.belongsTo(User, { foreignKey: 'userId', targetKey: 'id', as: 'userFavorites' });
-FavoriteMeal.belongsTo(Meal, { foreignKey: 'mealId', targetKey: 'id', as: 'favoriteMeal' });
-
-export default FavoriteMeal;
+export default MealHistory;

@@ -7,7 +7,7 @@ import Meal from "../model/meal.model";
 import Product from "src/Product/infrastructure/model/product.model";
 import DislikeProduct from "src/DislikeProduct/infrastructure/model/dislike.product.model";
 import { Op } from 'sequelize';
-import { sequelize } from "src/shared/infrastructure/db/db.sequelize.config";
+import { sequelize } from "src/Shared/infrastructure/db/db.sequelize.config";
 
 @Injectable()
 export class mealRepositorySequelize implements mealRepository{
@@ -19,15 +19,12 @@ export class mealRepositorySequelize implements mealRepository{
                 userId: userId
             }
         });
-        console.log(dislikeProducts);
-        
 
         if(dislikeProducts.length==0){//no tiene productos que no le gusten entonces retorno todas las comidas
             return await Meal.findAll();
         }
 
-
-        const dislikedProductIds = dislikeProducts.map(dislike => dislike.productId);
+        const dislikedProductIds = dislikeProducts.map(dislike => dislike.productId); //mapeo los dislike products para acceder a la propiedad id
 
         return await Meal.findAll({
             where: {

@@ -1,11 +1,11 @@
 import { DataTypes, Model } from 'sequelize';
 import Product from 'src/Product/infrastructure/model/product.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 
 class Meal extends Model {
     declare id: string;
     declare name:string
-    declare image:string
+    declare mealPicture:string
     declare recipe:string
     declare calories: number
     declare protein: number

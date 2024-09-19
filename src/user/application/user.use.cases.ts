@@ -1,18 +1,18 @@
 import { Injectable, Res } from '@nestjs/common';
 import { userRepositorySequelize } from '../infrastructure/repository/user.repository.sequelize';
 import { UserEntity } from '../domian/user.entity';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { CreateUserDto } from '../domian/dto/create.user.dto';
-import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 import { UpdateUserDto } from '../domian/dto/user.update';
-import { AuthService } from 'src/shared/infrastructure/auth/auth.service';
-import { SightEngineServices } from 'src/shared/infrastructure/IAimage/sight.engine.service';
-import { sendEmailServices } from 'src/shared/infrastructure/emailServices/send.email.service';
+import { AuthService } from 'src/Shared/infrastructure/auth/auth.service';
+import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
+import { sendEmailServices } from 'src/Shared/infrastructure/emailServices/send.email.service';
 import {
   CONST_VERIFY_ACCOUNT_SUBJECT,
   CONST_VERIFY_ACCOUNT_TEXT,
-} from 'src/templates/auth/verify.account/verify.account.const';
-import { VERIFY_ACCOUNT } from 'src/templates/auth/verify.account/verify.account';
+} from 'src/Templates/auth/verify.account/verify.account.const';
+import { VERIFY_ACCOUNT } from 'src/Templates/auth/verify.account/verify.account';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

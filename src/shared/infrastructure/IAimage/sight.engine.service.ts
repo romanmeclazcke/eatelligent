@@ -45,24 +45,25 @@ export class SightEngineServices {
 
 
   public detectProbabilities(data: any): boolean {
+    const percentageLimit = 0.5
     const nudity = (data.nudity && (
-        data.nudity.sexual_activity > 0.5 ||
-        data.nudity.sexual_display > 0.5 ||
-        data.nudity.erotica > 0.5
+        data.nudity.sexual_activity > percentageLimit ||
+        data.nudity.sexual_display >percentageLimit ||
+        data.nudity.erotica > percentageLimit
     ));
     
     const weapon = (data.weapon && (
-        data.weapon.classes.firearm > 0.5 || //ver donde poner la constante si aca o en otro archivo
-        data.weapon.classes.knife > 0.5
+        data.weapon.classes.firearm > percentageLimit || 
+        data.weapon.classes.knife > percentageLimit
     ));
     
-    const medical = (data.medical && data.medical.prob > 0.5);
+    const medical = (data.medical && data.medical.prob > percentageLimit);
     
-    const violence = (data.violence && data.violence.prob > 0.5);
+    const violence = (data.violence && data.violence.prob > percentageLimit);
     
-    const selfHarm = (data['self-harm'] && data['self-harm'].prob > 0.5);
+    const selfHarm = (data['self-harm'] && data['self-harm'].prob > percentageLimit);
     
-    const gambling = (data.gambling && data.gambling.prob > 0.5);
+    const gambling = (data.gambling && data.gambling.prob > percentageLimit);
     
     const result = nudity || weapon || medical || violence || selfHarm || gambling;
     

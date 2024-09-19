@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { likeRepositorySequelize } from "../infrastructure/repository/like.repository.sequelize";
 import { likeEntity } from "../domain/like.entity";
-import { Result } from "src/shared/infrastructure/patternResult/result";
+import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 import { postRepositorySequelize } from "src/Post/infrastructure/repository/post.repository.sequelize";
 

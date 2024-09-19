@@ -3,10 +3,10 @@ import { commentRepositorySequelize } from '../infrastructure/repository/comment
 import { commentCreateDto } from '../domain/dto/comment.create.dto';
 import { commentUpdateDto } from '../domain/dto/comment.update.dto';
 import { commentEntity } from '../domain/comment.entity';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { postRepositorySequelize } from 'src/Post/infrastructure/repository/post.repository.sequelize';
-import { badWordsService } from 'src/shared/infrastructure/IAtext/bad.word.service';
+import { badWordsService } from 'src/Shared/infrastructure/IAtext/bad.word.service';
 
 @Injectable()
 export class commentUseCases {

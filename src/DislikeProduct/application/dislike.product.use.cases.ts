@@ -1,6 +1,6 @@
 import { Injectable, Res } from '@nestjs/common';
 import { dislikeProductRepositorySequelize } from '../infrastructure/repository/dislike.product.repository.sequelize';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { dislikeProductEntity } from '../domain/dislike.product.entity';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { productRepositorySequelize } from 'src/Product/infrastructure/repository/product.repository.sequelize';

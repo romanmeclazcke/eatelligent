@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { productRepositorySequelize } from '../infrastructure/repository/product.repository.sequelize';
 import { productCreateDto } from '../domain/dto/product.create.dto';
 import { productUpdateDto } from '../domain/dto/product.update.dto';
-import { Result } from 'src/shared/infrastructure/patternResult/result';
+import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { productEntity } from '../domain/product.entity';
-import { CloudinaryService } from 'src/shared/infrastructure/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 
 @Injectable()
 export class productUseCases {

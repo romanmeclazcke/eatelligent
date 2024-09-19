@@ -1,7 +1,7 @@
 export interface mealEntity{
     id:string
     name: string
-    image:string
+    mealPicture:string
     recipe:string
     calories:number
     protein:number

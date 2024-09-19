@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import Comment from 'src/Comment/infrastructure/model/comment.model';
-import { sequelize } from 'src/shared/infrastructure/db/db.sequelize.config';
+import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
 class Post extends Model {
