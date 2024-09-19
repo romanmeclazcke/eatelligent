@@ -9,12 +9,12 @@ import {
 
 } from '@nestjs/common';
 import { Request , Response} from 'express';
-import { historyMealUseCases } from 'src/HistoryMeal/application/history.meal.use.cases';
+import { mealHistoryUseCases } from 'src/MealHistory/application/meal.history.use.cases';
 
 
 @Controller('history-meal')
-export class historyMealController {
-    constructor(private historyMealUseCases: historyMealUseCases){}
+export class mealHistoryController {
+    constructor(private historyMealUseCases: mealHistoryUseCases){}
 
   @Get('/:userId')
   async getHistoryMeal(

@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { historyMealRepositorySequelize } from "../Infrastructure/repository/history.meal.repository.sequelize";
-import { historyMealEntity } from "../domain/history.meal.entity";
+import { historyMealEntity } from "../domain/meal.history.entity";
 import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
 import { mealRepositorySequelize } from "src/Meal/infrastructure/repository/meal.repository.sequelize";
+import { mealHistoryRepositorySequelize } from "../Infrastructure/repository/meal.history.repository.sequelize";
 
 @Injectable()
-export class historyMealUseCases{
-    constructor(private historyMealRepository: historyMealRepositorySequelize, private userRepositoy:userRepositorySequelize, private mealRepository:mealRepositorySequelize){}
+export class mealHistoryUseCases{
+    constructor(private historyMealRepository: mealHistoryRepositorySequelize, private userRepositoy:userRepositorySequelize, private mealRepository:mealRepositorySequelize){}
 
     async getHistoryMeal(userId:string):Promise<Result<historyMealEntity[]>>{
         const user = await this.userRepositoy.getUserById(userId)

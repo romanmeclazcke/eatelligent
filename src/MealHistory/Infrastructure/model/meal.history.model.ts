@@ -3,7 +3,7 @@ import Meal from 'src/Meal/infrastructure/model/meal.model';
 import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 import User from 'src/user/infrastructure/models/user.models';
 
-class HistoryMeal extends Model {
+class MealHistory extends Model {
   declare id:string
   declare userId: string;
   declare mealId: string;
@@ -11,7 +11,7 @@ class HistoryMeal extends Model {
   declare createAt: Date;
 }
 
-HistoryMeal.init(
+MealHistory.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -32,19 +32,19 @@ HistoryMeal.init(
   },
   {
     sequelize,
-    tableName: 'HistoryMeal',
+    tableName: 'MealHistory',
     timestamps: true,
   },
 );
-HistoryMeal.belongsTo(User, {
+MealHistory.belongsTo(User, {
   foreignKey: 'userId',
   targetKey: 'id',
   as: 'user',
 });
-HistoryMeal.belongsTo(Meal, {
+MealHistory.belongsTo(Meal, {
   foreignKey: 'mealId',
   targetKey: 'id',
   as: 'meal',
 });
 
-export default HistoryMeal;
+export default MealHistory;

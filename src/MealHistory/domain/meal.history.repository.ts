@@ -1,6 +1,6 @@
-import { historyMealEntity } from "./history.meal.entity";
+import { historyMealEntity } from "./meal.history.entity";
 
-export interface historyMealRepository{
+export interface mealHistoryRepository{
 
     getHistoryMeal(userId:string):Promise<historyMealEntity[]>
     addHistoryMeal(userId:string, mealId:string):Promise<historyMealEntity>

@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
-import { historyMealRepository } from "../../domain/history.meal.repository";
-import { historyMealEntity } from "src/HistoryMeal/domain/history.meal.entity";
-import HistoryMeal from "../model/history.meal.model";
+import { historyMealEntity } from "src/MealHistory/domain/meal.history.entity";
 import Meal from "src/Meal/infrastructure/model/meal.model";
+import MealHistory from "../model/meal.history.model";
+import { mealHistoryRepository } from "src/MealHistory/domain/meal.history.repository";
+
 
 @Injectable()
-export class historyMealRepositorySequelize implements historyMealRepository{
+export class mealHistoryRepositorySequelize implements mealHistoryRepository{
     
     async getHistoryMeal(userId: string): Promise<historyMealEntity[]> {
-        return await HistoryMeal.findAll({
+        return await MealHistory.findAll({
             attributes:['id','createdAt'],
             where :{
                 userId:userId
@@ -22,7 +23,7 @@ export class historyMealRepositorySequelize implements historyMealRepository{
         })
     }
     async addHistoryMeal(userId: string, mealId: string): Promise<historyMealEntity> {
-       return await HistoryMeal.create({
+       return await MealHistory.create({
         userId:userId,
         mealId:mealId
        })
