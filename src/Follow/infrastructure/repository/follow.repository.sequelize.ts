@@ -4,11 +4,10 @@ import { followRepository } from "src/Follow/domain/follow.repository";
 import Follow from "../model/follow.model";
 import { Model } from "sequelize";
 import User from "src/user/infrastructure/models/user.models";
+import { followStatsEntity } from "src/Follow/domain/follow.stats.entity";
 
 @Injectable()
 export class followRepositorySequelize implements followRepository {
-    
-    
     
     async followUser(followerId: string, followedId: string): Promise<followEntity | null> {
         return await Follow.create({
@@ -47,8 +46,7 @@ export class followRepositorySequelize implements followRepository {
                 model:User,
                 as:'follower',
                 attributes:['userName','profilePicture']
-            }
-            ]
+            }]
         });
     }
 
@@ -60,12 +58,30 @@ export class followRepositorySequelize implements followRepository {
             include: [{
                 model:User,
                 as:'follower',
-
                 attributes:['userName','profilePicture'] //changed it to know a profile picture
 
-            }
-            ]
+            }]
         });
     }
+
+
+    async getFollowStats(userId: string): Promise<followStatsEntity | null> {
+        // Ejecuto ambas consultas en paralelo lo que mejora la eficiencia
+        const [followersCount, followingCount] = await Promise.all([
+            Follow.count({
+                where: {
+                    followedId: userId
+                }
+            }),
+            Follow.count({
+                where: {
+                    followerId: userId
+                }
+            })
+        ]);
+    
+        return { userId, followersCount, followingCount };
+    }
+    
     
 }

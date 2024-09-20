@@ -1,4 +1,5 @@
 import { followEntity } from "./follow.entity";
+import { followStatsEntity } from "./follow.stats.entity";
 
 export interface followRepository{
 
@@ -7,4 +8,5 @@ export interface followRepository{
     findIfFollow(followerId:string, followedId:string):Promise<followEntity|null>
     getListOfFollowers(userId:string):Promise<followEntity[]|null>
     getListOfFolloweds(userId:string):Promise<followEntity[]|null>
+    getFollowStats(userId:string):Promise<followStatsEntity|null>;
 }
