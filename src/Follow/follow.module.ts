@@ -9,7 +9,7 @@ import { userRepositorySequelize } from 'src/user/infrastructure/repository/user
 @Module({
   controllers: [followController],
   providers:[followUseCases,followRepositorySequelize,userRepositorySequelize],
-  exports:[],
+  exports:[followRepositorySequelize],
   imports:[]
 })
 export class FollowModule {}
