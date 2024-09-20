@@ -6,7 +6,6 @@ import Post from 'src/Post/infrastructure/model/post.model';
 import { Op } from 'sequelize';
 import User from 'src/user/infrastructure/models/user.models';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
-import Like from 'src/Like/infrastructure/model/like.model';
 import Comment from 'src/Comment/infrastructure/model/comment.model';
 import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 
@@ -72,6 +71,21 @@ export class postRepositorySequelize implements postRepository {
       where: {
         userId: userId,
       },
+      attributes:[
+        'id',
+        'description',
+        'image',
+        'createdAt',
+        'updatedAt',
+        [
+          sequelize.literal(`( 
+            SELECT COUNT(*)
+            FROM \`Like\`
+            WHERE \`Like\`.postId = Post.id 
+          )`),
+          'likeCount',
+        ],
+      ]
     });
     //TODO: add comments and user infomation to each comments  and count of likes
   }
