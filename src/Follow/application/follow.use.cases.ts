@@ -3,14 +3,13 @@ import { followRepositorySequelize } from "../infrastructure/repository/follow.r
 import { Result } from "src/Shared/infrastructure/patternResult/result";
 import { followEntity } from "../domain/follow.entity";
 import { userRepositorySequelize } from "src/user/infrastructure/repository/user.repository.sequelize";
-import { find } from "rxjs";
+import { followStatsEntity } from "../domain/follow.stats.entity";
 
 @Injectable()
 export class followUseCases{
 
     constructor(private followRepository: followRepositorySequelize, private userRepository: userRepositorySequelize){}
     
-
 
     async followUser(followerId:string, followedId:string):Promise<Result<followEntity>>{
         const findFollower= await this.userRepository.getUserById(followerId);
@@ -81,5 +80,19 @@ export class followUseCases{
         const followers = await this.followRepository.getListOfFolloweds(userId);
 
         return Result.succes(followers,200);
+    }
+
+    async getFollowStats(userId):Promise<Result<followStatsEntity|null>>{
+        const findUser = await this.userRepository.getUserById(userId);
+
+        if(!findUser){
+            return Result.failure("User not found",404);
+        }
+        
+        const stats= await this.followRepository.getFollowStats(userId)
+
+        if(stats) return Result.succes(stats,200);
+
+        return Result.failure("Internal server error",500);
     }
 }
