@@ -11,4 +11,6 @@ export interface userRepository{
     getUserByUserName(userName:string):Promise<UserEntity|null>
     updateUserInformation(user:UpdateUserDto,id:string):Promise<UserEntity|null>
     updateProfilePicture(file:string,id:string):Promise<UserEntity|null>
+
+    getRecomendationUsers(userId:String):Promise<UserEntity[]|null>
 }
