@@ -11,6 +11,7 @@ import { DislikeProductModule } from './DislikeProduct/dislike.product.module';
 import { FavoriteMealModule } from './FavoriteMeal/favorite.meal.module';
 import { AuthModule } from './Auth/auth.module';
 import { MealHistoryModule } from './MealHistory/history.meal.module';
+import { ShowProfileModule } from './ShowProfile/show.profile.module';
 @Module({
   imports: [
     UserModule,
@@ -24,7 +25,8 @@ import { MealHistoryModule } from './MealHistory/history.meal.module';
     DislikeProductModule,
     FavoriteMealModule,
     AuthModule,
-    MealHistoryModule
+    MealHistoryModule,
+    ShowProfileModule
   ],
   controllers: [],
   providers: [],

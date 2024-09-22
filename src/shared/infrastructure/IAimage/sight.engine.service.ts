@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable, Res } from '@nestjs/common';
 import { Result } from '../patternResult/result';
-import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 
 
@@ -16,7 +15,7 @@ export class SightEngineServices {
           params: {
             url: imageUrl,
             models:
-              'nudity-2.1,weapon,recreational_drug,medical,face-attributes,violence,self-harm,gambling',
+              'nudity-2.1,weapon,recreational_drug,violence,self-harm',
             api_user: process.env.API_USER_IMAGE,
             api_secret: process.env.API_SECRET_IMAGE,
           },

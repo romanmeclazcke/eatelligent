@@ -11,7 +11,7 @@ import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.eng
 @Module({
   controllers: [postController],
   providers:[postUsesCases,postRepositorySequelize,userRepositorySequelize, badWordsService,SightEngineServices ],
-  exports:[],
+  exports:[postRepositorySequelize],
   imports:[CloudinaryModule]
 })
 export class PostModule {}

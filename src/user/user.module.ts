@@ -5,14 +5,14 @@ import { userRepositorySequelize } from './infrastructure/repository/user.reposi
 import { CloudinaryModule } from 'src/Shared/infrastructure/cloudinary/cloudinary.module';
 import { AuthService } from 'src/Shared/infrastructure/auth/auth.service';
 import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 import { sendEmailServices } from 'src/Shared/infrastructure/emailServices/send.email.service';
 
 
 @Module({
   controllers: [userController],
   providers:[userUseCases,userRepositorySequelize,AuthService,SightEngineServices,sendEmailServices],
-  exports:[userUseCases],
+  exports:[userUseCases, userRepositorySequelize],
   imports:[CloudinaryModule,HttpModule]
 })
 export class UserModule {}

@@ -15,6 +15,7 @@ import {
 import { VERIFY_ACCOUNT } from 'src/Templates/auth/verify.account/verify.account';
 import { JwtService } from '@nestjs/jwt';
 
+
 @Injectable()
 export class userUseCases {
   constructor(
@@ -48,37 +49,22 @@ export class userUseCases {
     createUser: CreateUserDto,
     file: Express.Multer.File,
   ): Promise<Result<UserEntity | null>> {
-    const emailInUse = await this.userRepository.getUserByEmail(createUser.email);
-
+    const [emailInUse, usernameInUse] = await Promise.all([
+      this.userRepository.getUserByEmail(createUser.email),
+      this.userRepository.getUserByUserName(createUser.userName)
+    ]);
+  
     if (emailInUse) return Result.failure('User with email already exists', 404);
-    
-    const usernameInUse = await this.userRepository.getUserByUserName(createUser.userName);
-
     if (usernameInUse) return Result.failure('User with username already exists', 404);
     
-
     const passwordHashed = await this.authService.hashPassword(createUser.password);
 
     if (!passwordHashed.isSucces) return Result.failure('Error to hash password', 500);
     
+    const profilePictureUrl = await this.handleProfilePictureUpload(file);
+    if (profilePictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
+    if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
-    let profilePictureUrl: string | null = null;
-
-    if (file) {
-      try {
-        const uploadResult = await this.cloudinary.uploadImage(file);
-        profilePictureUrl = uploadResult.url;
-        
-        const resultDetection =await this.imageServices.detectImage(profilePictureUrl); //detecto si la imagen contiene contenido inaporpiado
-
-        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
-          this.cloudinary.deleteImage(profilePictureUrl);
-          return Result.failure('prohibited content', 400);
-        }
-      } catch (uploadError) {
-        return Result.failure('Failed to upload image', 500);
-      }
-    }
     const userWithImage: CreateUserDto = {
       ...createUser,
       profilePicture: profilePictureUrl,
@@ -88,14 +74,7 @@ export class userUseCases {
     const user = await this.userRepository.createUser(userWithImage);
 
     if (user) {
-      const token= await this.jwtServices.signAsync({ id: user.id,name:user.name, email: user.email });
-      this.emailServices.sendEmail(
-        CONST_VERIFY_ACCOUNT_SUBJECT,
-        VERIFY_ACCOUNT(user.userName,token),
-        user.email,
-        CONST_VERIFY_ACCOUNT_TEXT,
-      );   //envio email de confirmacion
-
+      this.sendConfirmationEmail(user);
       return Result.succes(user, 201);
     }
     return Result.failure('Error to create user', 500);
@@ -127,34 +106,52 @@ export class userUseCases {
       return Result.failure('User not found', 404);
     }
 
-    if (file) {
-      try {
-        const uploadResult = await this.cloudinary.uploadImage(file);
-        const profilePictureUrl = uploadResult.url;
+    const profilePictureUrl = await this.handleProfilePictureUpload(file);
+    if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
-        const resultDetection =
-          await this.imageServices.detectImage(profilePictureUrl);
+    if (profilePictureUrl === 'prohibited'){
+      this.cloudinary.deleteImage(profilePictureUrl)
+      return Result.failure('Prohibited content', 400);
+    } 
 
-        if (!resultDetection.isSucces) {
-          //si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
-          this.cloudinary.deleteImage(profilePictureUrl);
-          return Result.failure('prohibited content', 406);
-        }
+    this.cloudinary.deleteImage(user.profilePicture); //elimino la imagen anterior del usuario
+      
+    const userUpdated = await this.userRepository.updateProfilePicture(
+      profilePictureUrl,
+      id,
+    );
 
-        this.cloudinary.deleteImage(user.profilePicture); //si la imagen es valida ya puedo eliminar su anterior imagen
+    if(userUpdated) return Result.succes(userUpdated,200);
 
-        const userUpdated = await this.userRepository.updateProfilePicture(
-          profilePictureUrl,
-          id,
-        );
-
-        if (userUpdated) {
-          return Result.succes(userUpdated, 200);
-        }
-        return Result.failure('User not found', 404);
-      } catch (uploadError) {
-        return Result.failure('Failed to upload image', 500);
-      }
-    }
+    return Result.failure('Internal server error', 500);
   }
+
+  private async sendConfirmationEmail(user: UserEntity) {
+    const token = await this.jwtServices.signAsync({ id: user.id, name: user.name, email: user.email });
+     this.emailServices.sendEmail(
+      CONST_VERIFY_ACCOUNT_SUBJECT,
+      VERIFY_ACCOUNT(user.userName, token),
+      user.email,
+      CONST_VERIFY_ACCOUNT_TEXT,
+    );
+  }
+
+  private async handleProfilePictureUpload(file: Express.Multer.File): Promise<string | 'prohibited' | 'uploadError'> {
+  if (!file) return null;
+
+  try {
+    const uploadResult = await this.cloudinary.uploadImage(file);
+    const profilePictureUrl = uploadResult.url;
+
+    const resultDetection = await this.imageServices.detectImage(profilePictureUrl);
+    if (!resultDetection.isSucces) {
+      await this.cloudinary.deleteImage(profilePictureUrl);
+      return 'prohibited';
+    }
+
+    return profilePictureUrl;
+  } catch (error) {
+    return 'uploadError';
+  }
+}
 }

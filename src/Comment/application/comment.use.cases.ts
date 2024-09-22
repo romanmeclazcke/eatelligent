@@ -24,14 +24,11 @@ export class commentUseCases {
   ): Promise<Result<commentEntity>> {
     const user = await this.userRepository.getUserById(userId);
 
-    if (!user) {
-      return Result.failure('User not found', 404);
-    }
+    if (!user) return Result.failure('User not found', 404);
+
     const post = await this.postRepository.getPostById(postId);
 
-    if (!post) {
-      return Result.failure('Post not found', 404);
-    }
+    if (!post) return Result.failure('Post not found', 404);
 
     const badWordsResult = await this.badWordsServices.detectBadWords(
       commentCreateDto.comment,
@@ -48,9 +45,7 @@ export class commentUseCases {
       commentCreateDto,
     );
 
-    if (commentCreateDto) {
-      return Result.succes(commentCreated, 201);
-    }
+    if (commentCreateDto) return Result.succes(commentCreated, 201);
 
     return Result.failure('Internal server error', 500);
   }
@@ -92,9 +87,8 @@ export class commentUseCases {
       commentToUpdate,
     );
 
-    if (commentUpdated) {
-      return Result.succes(commentUpdated, 200);
-    }
+    if (commentUpdated) return Result.succes(commentUpdated, 200);
+
     return Result.failure('Comment not found', 404);
   }
 }
