@@ -49,6 +49,7 @@ export class userUseCases {
     createUser: CreateUserDto,
     file: Express.Multer.File,
   ): Promise<Result<UserEntity | null>> {
+
     const [emailInUse, usernameInUse] = await Promise.all([
       this.userRepository.getUserByEmail(createUser.email),
       this.userRepository.getUserByUserName(createUser.userName)
@@ -128,7 +129,7 @@ export class userUseCases {
 
   private async sendConfirmationEmail(user: UserEntity) {
     const token = await this.jwtServices.signAsync({ id: user.id, name: user.name, email: user.email });
-     this.emailServices.sendEmail(
+    this.emailServices.sendEmail(
       CONST_VERIFY_ACCOUNT_SUBJECT,
       VERIFY_ACCOUNT(user.userName, token),
       user.email,
@@ -138,7 +139,6 @@ export class userUseCases {
 
   private async handleProfilePictureUpload(file: Express.Multer.File): Promise<string | 'prohibited' | 'uploadError'> {
   if (!file) return null;
-
   try {
     const uploadResult = await this.cloudinary.uploadImage(file);
     const profilePictureUrl = uploadResult.url;
