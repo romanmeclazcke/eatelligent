@@ -1,13 +1,15 @@
-import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { authUseCases } from 'src/Auth/application/auth.use.cases';
 import { loginDto } from 'src/Auth/domain/dto/login.dto';
+import { Public } from 'src/Shared/infrastructure/decorators/is.public';
 
 @Controller('auth')
 export class authController {
   constructor(private authUseCases: authUseCases) {}
 
   @Post('/login')
+  @Public()
   async login(
     @Body() loginDto: loginDto,
     @Req() req: Request,
