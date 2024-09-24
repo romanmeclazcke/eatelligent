@@ -25,7 +25,6 @@ export class userController {
 
 
   @Get()
-  @UseGuards(AuthGuardJwt)
   async getUsers(@Req() req: Request, @Res() res: Response) {
     const result = await this.userUseCase.getAllUser();
     result.isSucces
