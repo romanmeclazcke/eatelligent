@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
-import { AuthGuardJwt } from 'src/Shared/infrastructure/guards/auth.guard.jwt';
+import { Public } from 'src/Shared/infrastructure/decorators/is.public';
 import { userUseCases } from 'src/user/application/user.use.cases';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 import { UpdateUserDto } from 'src/user/domian/dto/user.update';
@@ -53,6 +53,7 @@ export class userController {
   }
 
   @Post('/new')
+  @Public()
   @UseInterceptors(FileInterceptor('profilePicture')) // 'profilePicture' es el nombre del campo de archivo que recibo
   async createUser(
     @Body() createUserDto: CreateUserDto,
