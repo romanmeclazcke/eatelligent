@@ -71,7 +71,7 @@ export class postController {
   }
 
   @Post('/new/:userId')
-  @UseInterceptors(FileInterceptor('postPicture'))
+  @UseInterceptors(FileInterceptor('image'))
   async createPost(
     @Body() postCreateDto: postCreateDto,
     @UploadedFile() file: Express.Multer.File,
@@ -90,7 +90,7 @@ export class postController {
   }
 
   @Patch('/edit/:userId/:postId')
-  @UseInterceptors(FileInterceptor('postPicture'))
+  @UseInterceptors(FileInterceptor('image'))
   async updatePost(
     @Body() postUpdateDto: postUpdateDto,
     @UploadedFile() file: Express.Multer.File,
