@@ -5,7 +5,7 @@ dotenv.config();
 
 export const sequelize = new Sequelize(
   process.env.DATABASE as string,
-  process.env.USER as string,
+  process.env.USER_DB as string,
   process.env.PASSWORD as string,
   {
     host: process.env.HOST,
@@ -18,7 +18,7 @@ export const syncDatabase = async () => {
   try {
 
     sequelize
-      .sync({ alter: true })
+      .sync()
       .then(() => {
         console.log('Modelos sincronizados correctamente');
       })
