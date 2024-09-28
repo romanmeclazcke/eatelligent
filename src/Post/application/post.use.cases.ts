@@ -76,24 +76,9 @@ export class postUsesCases {
         }  
     }
 
-    let postPictureUrl: string | null = null;
-
-    if (file) {
-      try {
-        const uploadResult = await this.cloudinary.uploadImage(file);
-        postPictureUrl = uploadResult.url;
-
-        const resultDetection =await this.imageServices.detectImage(postPictureUrl); //detecto si la imagen contiene contenido inaporpiado
-
-        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
-          this.cloudinary.deleteImage(postPictureUrl); //elimino la imagen
-          return Result.failure('prohibited content', 400);
-        }
-       
-      } catch (uploadError) {
-        return Result.failure('Failed to upload image', 500);
-      }
-    }
+    const postPictureUrl = await this.handleProfilePictureUpload(file);
+    if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
+    if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
     const postToCreate: postCreateDto = {
       ...postCreateDto,
@@ -121,30 +106,16 @@ export class postUsesCases {
       return Result.failure('User not found', 404);
     }
 
+    const {image: oldImgeUrl}= await this.postRepository.getPostById(id);
     
     if(postUpdateDto.description){
       if(await this.badWordsServices.detectBadWords(postUpdateDto.description)){
         return Result.failure("Post contain bad words",404);
       }  
     }
-    let postPictureUrl: string | null = null;
-
-    if (file) {
-      try {
-        const uploadResult = await this.cloudinary.uploadImage(file);
-        postPictureUrl = uploadResult.url;
-
-        const resultDetection =await this.imageServices.detectImage(postPictureUrl); //detecto si la imagen contiene contenido inaporpiado
-
-        if (!resultDetection.isSucces) {//si el resultado no es exitoso (contiene imagenes con contenido inapropiado)
-          this.cloudinary.deleteImage(postPictureUrl); //elimino la imagen
-          return Result.failure('prohibited content', 400);
-        }
-       
-      } catch (uploadError) {
-        return Result.failure('Failed to upload image', 500);
-      }
-    }
+    const postPictureUrl = await this.handleProfilePictureUpload(file);
+    if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
+    if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
     const postToUpdated: postUpdateDto = {
       ...postUpdateDto,
@@ -157,11 +128,13 @@ export class postUsesCases {
       postToUpdated,
     );
 
-    if (postUpdated) {
-      return Result.succes(postUpdated, 200);
+    if (!postUpdated) {
+      return Result.failure('Internal server error', 500);
     }
-
-    return Result.failure('Internal server error', 500);
+    if(oldImgeUrl){
+      console.log(this.cloudinary.deleteImage(oldImgeUrl));
+    }
+    return Result.succes(postUpdated, 200);
   }
 
   async deletePost(
@@ -174,5 +147,23 @@ export class postUsesCases {
       return Result.succes("Post succesfully deleted", 200);
     }
     return Result.failure('Internal server error', 500);
+  }
+
+  private async handleProfilePictureUpload(file: Express.Multer.File): Promise<string | 'prohibited' | 'uploadError'> {
+    if (!file) return null;
+    try {
+      const uploadResult = await this.cloudinary.uploadImage(file);
+      const profilePictureUrl = uploadResult.url;
+  
+      const resultDetection = await this.imageServices.detectImage(profilePictureUrl);
+      if (!resultDetection.isSucces) {
+        await this.cloudinary.deleteImage(profilePictureUrl);
+        return 'prohibited';
+      }
+  
+      return profilePictureUrl;
+    } catch (error) {
+      return 'uploadError';
+    }
   }
 }
