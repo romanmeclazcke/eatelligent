@@ -5,12 +5,26 @@ import { Result } from '../patternResult/result';
 
 @Injectable()
 export class CloudinaryService {
+
+
   async uploadImage(
     file: Express.Multer.File,
+    folder: string, // Agregamos un parámetro para la carpeta
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
     
     return new Promise((resolve, reject) => {
-      const upload = v2.uploader.upload_stream((error, result) => {
+      const upload = v2.uploader.upload_stream({
+        quality: 'auto',
+        fetch_format: 'auto',
+        transformation: [
+          {
+            width: 800,
+            height: 600, 
+            crop: 'limit', 
+          }
+        ],
+        folder: folder // Especifica la carpeta donde se subirá la imagen
+      }, (error, result) => {
         if (error) return reject(error);
         resolve(result);
       });

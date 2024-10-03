@@ -76,7 +76,7 @@ export class postUsesCases {
         }  
     }
 
-    const postPictureUrl = await this.handleProfilePictureUpload(file);
+    const postPictureUrl = await this.handleProfilePictureUpload(file, "post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -113,7 +113,7 @@ export class postUsesCases {
         return Result.failure("Post contain bad words",404);
       }  
     }
-    const postPictureUrl = await this.handleProfilePictureUpload(file);
+    const postPictureUrl = await this.handleProfilePictureUpload(file,"post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -149,10 +149,10 @@ export class postUsesCases {
     return Result.failure('Internal server error', 500);
   }
 
-  private async handleProfilePictureUpload(file: Express.Multer.File): Promise<string | 'prohibited' | 'uploadError'> {
+  private async handleProfilePictureUpload(file: Express.Multer.File,folder:string): Promise<string | 'prohibited' | 'uploadError'> {
     if (!file) return null;
     try {
-      const uploadResult = await this.cloudinary.uploadImage(file);
+      const uploadResult = await this.cloudinary.uploadImage(file,folder);
       const profilePictureUrl = uploadResult.url;
   
       const resultDetection = await this.imageServices.detectImage(profilePictureUrl);

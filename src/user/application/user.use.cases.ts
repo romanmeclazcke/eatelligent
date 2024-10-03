@@ -8,7 +8,7 @@ import { UpdateUserDto } from '../domian/dto/user.update';
 import { AuthService } from 'src/Shared/infrastructure/auth/auth.service';
 import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
 import { sendEmailServices } from 'src/Shared/infrastructure/emailServices/send.email.service';
-import {
+import { 
   CONST_VERIFY_ACCOUNT_SUBJECT,
   CONST_VERIFY_ACCOUNT_TEXT,
 } from 'src/Templates/auth/verify.account/verify.account.const';
@@ -62,7 +62,7 @@ export class userUseCases {
 
     if (!passwordHashed.isSucces) return Result.failure('Error to hash password', 500);
     
-    const profilePictureUrl = await this.handleProfilePictureUpload(file);
+    const profilePictureUrl = await this.handleProfilePictureUpload(file,"profile_pictures");
     if (profilePictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -107,7 +107,7 @@ export class userUseCases {
       return Result.failure('User not found', 404);
     }
 
-    const profilePictureUrl = await this.handleProfilePictureUpload(file);
+    const profilePictureUrl = await this.handleProfilePictureUpload(file,"profile_pictures");
     if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
     if (profilePictureUrl === 'prohibited'){
@@ -137,10 +137,10 @@ export class userUseCases {
     );
   }
 
-  private async handleProfilePictureUpload(file: Express.Multer.File): Promise<string | 'prohibited' | 'uploadError'> {
+  private async handleProfilePictureUpload(file: Express.Multer.File,folder:string): Promise<string | 'prohibited' | 'uploadError'> {
   if (!file) return null;
   try {
-    const uploadResult = await this.cloudinary.uploadImage(file);
+    const uploadResult = await this.cloudinary.uploadImage(file,folder);
     const profilePictureUrl = uploadResult.url;
 
     const resultDetection = await this.imageServices.detectImage(profilePictureUrl);
