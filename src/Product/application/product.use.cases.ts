@@ -13,7 +13,7 @@ export class productUseCases {
     private cloudinary: CloudinaryService,
   ) {}
 
-  async createProduct(
+  async createProduct(  //refactorizar
     productCreateDto: productCreateDto,
     productImage: Express.Multer.File,
   ): Promise<Result<productEntity | null>> {
@@ -31,7 +31,7 @@ export class productUseCases {
 
     let productImageUrl: string | null = null;
     try {
-      const uploadResult = await this.cloudinary.uploadImage(productImage);
+      const uploadResult = await this.cloudinary.uploadImage(productImage,"product_picture");
       productImageUrl = uploadResult.url;
     } catch (uploadError) {
       return Result.failure('Failed to upload image', 500);
@@ -51,7 +51,7 @@ export class productUseCases {
     return Result.failure('Internal server error', 500);
   }
 
-  async editProduct(
+  async editProduct( //refactorizar
     productId: string,
     productUpdateDto: productUpdateDto,
     productImage: Express.Multer.File,
@@ -66,7 +66,7 @@ export class productUseCases {
 
     if (productImage) {
       try {
-        const uploadResult = await this.cloudinary.uploadImage(productImage);
+        const uploadResult = await this.cloudinary.uploadImage(productImage,"product_picture");
         productImageUrl = uploadResult.url;
         this.cloudinary.deleteImage(product.productImage); //elimino la imagen dee cloudinary para no desperciar almacenamiento en imagenes no utilizadas
       } catch (uploadError) {

@@ -91,7 +91,7 @@ export class mealUseCases {
     return Result.failure('Internal server error', 500);
   }
 
-  async updateMeal(
+  async updateMeal( //refactorizar todo
     mealId: string,
     mealUpdateDto: mealUpdateDto,
     file: Express.Multer.File,
@@ -100,7 +100,7 @@ export class mealUseCases {
     let mealImage: string | null = null;
     if (file) {
         try {
-          const uploadResult = await this.cloudinary.uploadImage(file);
+          const uploadResult = await this.cloudinary.uploadImage(file,"meal_picture");
           mealImage = uploadResult.url;
         } catch (uploadError) {
           return Result.failure('Failed to upload image', 500);
