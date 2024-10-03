@@ -13,7 +13,6 @@ export class badWordsService {
 
     async detectBadWords(text: string): Promise<boolean> {
         const textTraslated = await this.trasnlateService.translateText(text);
-        console.log(textTraslated)
         const isProfane = this.filter.isProfane(textTraslated!="error"?textTraslated:text);
         return isProfane;
     }
