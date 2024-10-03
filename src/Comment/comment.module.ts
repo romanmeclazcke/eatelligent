@@ -5,10 +5,11 @@ import { commentRepositorySequelize } from './infrastructure/repository/comment.
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { postRepositorySequelize } from 'src/Post/infrastructure/repository/post.repository.sequelize';
 import { badWordsService } from 'src/Shared/infrastructure/IAtext/bad.word.service';
+import { trasnlateService } from 'src/Shared/infrastructure/translate/translate.service';
 
 @Module({
   controllers: [commentController],
-  providers:[commentUseCases,commentRepositorySequelize, userRepositorySequelize, postRepositorySequelize, badWordsService],
+  providers:[commentUseCases,commentRepositorySequelize, userRepositorySequelize, postRepositorySequelize, badWordsService, trasnlateService],
   exports:[],
   imports:[]
 })
