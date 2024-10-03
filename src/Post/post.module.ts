@@ -6,11 +6,12 @@ import { postRepositorySequelize } from './infrastructure/repository/post.reposi
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { badWordsService } from 'src/Shared/infrastructure/IAtext/bad.word.service';
 import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
+import { trasnlateService } from 'src/Shared/infrastructure/translate/translate.service';
 
 
 @Module({
   controllers: [postController],
-  providers:[postUsesCases,postRepositorySequelize,userRepositorySequelize, badWordsService,SightEngineServices ],
+  providers:[postUsesCases,postRepositorySequelize,userRepositorySequelize, badWordsService,SightEngineServices,trasnlateService ],
   exports:[postRepositorySequelize],
   imports:[CloudinaryModule]
 })
