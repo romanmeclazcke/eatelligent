@@ -13,32 +13,32 @@ export class mealUseCases {
     private mealRepository: mealRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
-  ) {}
+  ) { }
 
-  
+
   async getMealsByTastes(userId: string): Promise<Result<mealEntity[] | null>> {
     const user = await this.userRepository.getUserById(userId);
-    
+
     if (!user) {
       return Result.failure('User not found', 404);
     }
-    const meals= await this.mealRepository.getMealsByTastes(userId);
+    const meals = await this.mealRepository.getMealsByTastes(userId);
 
-    if(meals){
-      return Result.succes(meals,200);
+    if (meals) {
+      return Result.succes(meals, 200);
     }
-    return Result.failure("meals not founds",404)
+    return Result.failure("meals not founds", 404)
   }
 
-  async getMealById(mealId:string):Promise<Result<mealEntity | null>>{
-    const meal= await this.mealRepository.getMealById(mealId);
+  async getMealById(mealId: string): Promise<Result<mealEntity | null>> {
+    const meal = await this.mealRepository.getMealById(mealId);
 
-    if(meal){
-      return Result.succes(meal,200)
+    if (meal) {
+      return Result.succes(meal, 200)
     }
     return Result.failure('Meal not found', 404);
   }
-  
+
   async deleteMeal(mealId: string): Promise<Result<mealEntity | null>> {
     const meal = await this.mealRepository.getMealById(mealId);
 
@@ -49,7 +49,7 @@ export class mealUseCases {
     const mealDeleted = await this.mealRepository.deleteMeal(mealId);
     this.cloudinary.deleteImage(meal.mealPicture); //no necesito que el proceso sea asincronico, realmente no me interesa el resultado
 
-    if (mealDeleted>0) {
+    if (mealDeleted > 0) {
       return Result.succes(meal, 200);
     }
 
@@ -70,7 +70,7 @@ export class mealUseCases {
     //     return Result.failure('Failed to upload image', 500);
     //   }
     // }
-    
+
     const mealToCreate: mealCreateDto = {
       ...mealCreateDto,
       mealPicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh6cOMOl7iTHblduozB1vGzuBXw4uU0iQMVw&s",
@@ -83,7 +83,7 @@ export class mealUseCases {
     if (meal) {
       // Si se proporcionan IDs de productos, asocia los productos con la comida
       if (mealCreateDto.productsId && mealCreateDto.productsId.length > 0) {
-          await meal.addProducts(mealCreateDto.productsId)
+        await meal.addProducts(mealCreateDto.productsId)
       }
       return Result.succes(meal, 201);
     }
@@ -99,26 +99,26 @@ export class mealUseCases {
 
     let mealImage: string | null = null;
     if (file) {
-        try {
-          const uploadResult = await this.cloudinary.uploadImage(file,"meal_picture");
-          mealImage = uploadResult.url;
-        } catch (uploadError) {
-          return Result.failure('Failed to upload image', 500);
-        }
+      try {
+        const uploadResult = await this.cloudinary.uploadImage(file, "meal_picture");
+        mealImage = uploadResult.url;
+      } catch (uploadError) {
+        return Result.failure('Failed to upload image', 500);
       }
-  
-      const mealToUpdate: mealUpdateDto = {
-        ...mealUpdateDto,
-        image: mealImage,
-      };
-  
-      const meal = await this.mealRepository.updateMeals(mealId,mealToUpdate);
-  
-      if (meal) {
-        return Result.succes(meal, 201);
-      }
-  
-      return Result.failure('Internal srever error', 500);
-    
+    }
+
+    const mealToUpdate: mealUpdateDto = {
+      ...mealUpdateDto,
+      image: mealImage,
+    };
+
+    const meal = await this.mealRepository.updateMeals(mealId, mealToUpdate);
+
+    if (meal) {
+      return Result.succes(meal, 201);
+    }
+
+    return Result.failure('Internal srever error', 500);
+
   }
 }
