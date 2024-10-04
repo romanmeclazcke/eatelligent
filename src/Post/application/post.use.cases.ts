@@ -7,7 +7,6 @@ import { postCreateDto } from '../domain/dto/post.create.dto';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { badWordsService } from 'src/Shared/infrastructure/IAtext/bad.word.service';
-import { SightEngineServices } from 'src/Shared/infrastructure/IAimage/sight.engine.service';
 
 @Injectable()
 export class postUsesCases {
@@ -16,7 +15,6 @@ export class postUsesCases {
     private cloudinary: CloudinaryService,
     private userRepository: userRepositorySequelize,
     private badWordsServices : badWordsService,
-    private imageServices: SightEngineServices
   ) {}
 
   async getPostsFromUsersIFollow(
@@ -76,7 +74,7 @@ export class postUsesCases {
         }  
     }
 
-    const postPictureUrl = await this.handleProfilePictureUpload(file, "post");
+    const postPictureUrl = await this.cloudinary.handleProfilePictureUpload(file, "post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -113,7 +111,7 @@ export class postUsesCases {
         return Result.failure("Post contain bad words",404);
       }  
     }
-    const postPictureUrl = await this.handleProfilePictureUpload(file,"post");
+    const postPictureUrl = await this.cloudinary.handleProfilePictureUpload(file,"post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -149,21 +147,4 @@ export class postUsesCases {
     return Result.failure('Internal server error', 500);
   }
 
-  private async handleProfilePictureUpload(file: Express.Multer.File,folder:string): Promise<string | 'prohibited' | 'uploadError'> {
-    if (!file) return null;
-    try {
-      const uploadResult = await this.cloudinary.uploadImage(file,folder);
-      const profilePictureUrl = uploadResult.url;
-  
-      const resultDetection = await this.imageServices.detectImage(profilePictureUrl);
-      if (!resultDetection.isSucces) {
-        await this.cloudinary.deleteImage(profilePictureUrl);
-        return 'prohibited';
-      }
-  
-      return profilePictureUrl;
-    } catch (error) {
-      return 'uploadError';
-    }
-  }
 }
