@@ -10,6 +10,19 @@ export class mealController{
 
     constructor(private mealUseCases:mealUseCases){}
 
+    @Get('show-all')
+    async getMeals(
+        @Req() req: Request,
+        @Res() res: Response,
+    ){
+      const result = await this.mealUseCases.getMeals()
+      result.isSucces?
+      res.status(result.statusCode).json({ message: result.value, details: true }):
+      res.status(result.statusCode).json({ message: result.error, details: false });
+
+    }
+
+
 
     @Get('show-all/:userId')
     async getMealsByTestes(

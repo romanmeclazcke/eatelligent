@@ -14,7 +14,16 @@ export class mealUseCases {
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
   ) { }
+  
 
+  async getMeals(): Promise<Result<mealEntity[] | null>>{
+    const meals= await this.mealRepository.getMeals();
+    
+    if(meals){
+      return Result.succes(meals,200);
+    }
+    return Result.failure("Meals not found",404)
+  }
 
   async getMealsByTastes(userId: string): Promise<Result<mealEntity[] | null>> {
     const user = await this.userRepository.getUserById(userId);

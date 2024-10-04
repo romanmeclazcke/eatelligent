@@ -12,6 +12,10 @@ import { sequelize } from "src/Shared/infrastructure/db/db.sequelize.config";
 @Injectable()
 export class mealRepositorySequelize implements mealRepository{
 
+    async getMeals(): Promise<mealEntity[] | null> {
+        return  await Meal.findAll();
+    }
+
     async getMealsByTastes(userId: string): Promise<mealEntity[] | null> {
         const dislikeProducts = await DislikeProduct.findAll({
             attributes: ['productId'],  

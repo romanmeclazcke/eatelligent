@@ -5,6 +5,7 @@ import { mealEntity } from "./meal.entity";
 
 export interface mealRepository{
 
+    getMeals():Promise<mealEntity[]|null>
     getMealsByTastes(userId:string):Promise<mealEntity[]|null>
     getMealById(mealId:string):Promise<mealEntity|null>
     createMeal(mealCreateDto:mealCreateDto):Promise<Meal|null>//SOLO USUARIOS AMDIN
