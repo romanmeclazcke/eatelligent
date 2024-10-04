@@ -74,7 +74,7 @@ export class postUsesCases {
         }  
     }
 
-    const postPictureUrl = await this.cloudinary.handleProfilePictureUpload(file, "post");
+    const postPictureUrl = await this.cloudinary.handlePictures(file, "post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -111,7 +111,7 @@ export class postUsesCases {
         return Result.failure("Post contain bad words",404);
       }  
     }
-    const postPictureUrl = await this.cloudinary.handleProfilePictureUpload(file,"post");
+    const postPictureUrl = await this.cloudinary.handlePictures(file,"post");
     if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 

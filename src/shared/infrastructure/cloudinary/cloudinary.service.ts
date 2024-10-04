@@ -9,7 +9,7 @@ export class CloudinaryService {
   constructor(private imageServices: SightEngineServices) { }
 
 
-  async handleProfilePictureUpload(file: Express.Multer.File, folder: string): Promise<string | 'prohibited' | 'uploadError'> {
+  async handlePictures(file: Express.Multer.File, folder: string): Promise<string | 'prohibited' | 'uploadError'> {
     if (!file) return null;
     try {
       const uploadResult = await this.uploadImage(file, folder);

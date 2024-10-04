@@ -60,7 +60,7 @@ export class userUseCases {
 
     if (!passwordHashed.isSucces) return Result.failure('Error to hash password', 500);
 
-    const profilePictureUrl = await this.cloudinary.handleProfilePictureUpload(file, "profile_picture");
+    const profilePictureUrl = await this.cloudinary.handlePictures(file, "profile_picture");
     if (profilePictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
     if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
@@ -105,7 +105,7 @@ export class userUseCases {
       return Result.failure('User not found', 404);
     }
 
-    const profilePictureUrl = await this.cloudinary.handleProfilePictureUpload(file, "profile_pictures");
+    const profilePictureUrl = await this.cloudinary.handlePictures(file, "profile_pictures");
     if (profilePictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
 
     if (profilePictureUrl === 'prohibited') {
