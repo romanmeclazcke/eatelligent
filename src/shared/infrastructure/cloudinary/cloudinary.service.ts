@@ -2,16 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
 import { Result } from '../patternResult/result';
+import { SightEngineServices } from '../IAimage/sight.engine.service';
 
 @Injectable()
 export class CloudinaryService {
+  constructor(private imageServices: SightEngineServices) { }
 
+
+  async handleProfilePictureUpload(file: Express.Multer.File, folder: string): Promise<string | 'prohibited' | 'uploadError'> {
+    if (!file) return null;
+    try {
+      const uploadResult = await this.uploadImage(file, folder);
+      const profilePictureUrl = uploadResult.url;
+
+      const resultDetection = await this.imageServices.detectImage(profilePictureUrl);
+      if (!resultDetection.isSucces) {
+        await this.deleteImage(profilePictureUrl);
+        return 'prohibited';
+      }
+
+      return profilePictureUrl;
+    } catch (error) {
+      return 'uploadError';
+    }
+  }
 
   async uploadImage(
     file: Express.Multer.File,
     folder: string, // Agregamos un parámetro para la carpeta
   ): Promise<UploadApiResponse | UploadApiErrorResponse> {
-    
+
     return new Promise((resolve, reject) => {
       const upload = v2.uploader.upload_stream({
         quality: 'auto',
@@ -19,8 +39,8 @@ export class CloudinaryService {
         transformation: [
           {
             width: 800,
-            height: 600, 
-            crop: 'limit', 
+            height: 600,
+            crop: 'limit',
           }
         ],
         folder: folder // Especifica la carpeta donde se subirá la imagen
@@ -28,7 +48,7 @@ export class CloudinaryService {
         if (error) return reject(error);
         resolve(result);
       });
-    
+
       toStream(file.buffer).pipe(upload);
     });
   }
@@ -36,17 +56,17 @@ export class CloudinaryService {
   async deleteImage(publicUrl: string): Promise<Result<string>> {
     const publicId = this.extractPublicIdFromUrl(publicUrl);
     if (!publicId) {
-      return Result.failure("invalid format url",404)
+      return Result.failure("invalid format url", 404)
     }
 
     try {
       const result = await v2.uploader.destroy(publicId);
       if (result.result === 'ok') {
-        return Result.succes("image Deleted",200);
-      } 
-      return Result.failure("error to deleted image",500);
+        return Result.succes("image Deleted", 200);
+      }
+      return Result.failure("error to deleted image", 500);
     } catch (error) {
-      throw error; 
+      throw error;
     }
   }
 
