@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { loginDto } from '../domain/dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
@@ -12,6 +12,9 @@ import {
   CONST_VERIFY_ACCOUNT_TEXT,
 } from 'src/Templates/auth/verify.account/verify.account.const';
 import { VERIFY_ACCOUNT } from 'src/Templates/auth/verify.account/verify.account';
+import { changePasswordDto } from '../domain/dto/change.password.dto';
+import { UserEntity } from 'src/user/domian/user.entity';
+import { UpdateUserDto } from 'src/user/domian/dto/user.update';
 
 @Injectable()
 export class authUseCases {
@@ -92,5 +95,37 @@ export class authUseCases {
     if (!validated) return Result.failure('Error to validate account', 500);
 
     return Result.succes(true, 200);
+  }
+
+  async changePassword(userId:string, changePasswordDto:changePasswordDto):Promise<Result<UserEntity>>{
+    const user =  await this.userRepositorySequelize.getUserById(userId);
+
+    if(!user)return Result.failure("User not found",404)
+
+    const isValidPassword = await this.authService.comparePassword(changePasswordDto.oldPassword,user.password);
+
+    if(!isValidPassword) return Result.failure("Invalid password",500);
+
+    if(changePasswordDto.newPassword!=changePasswordDto.confirmPassword) return Result.failure("new password most be the same",404)
+
+    const newPasswordHashed= await this.authService.hashPassword(changePasswordDto.newPassword)
+
+    if(!newPasswordHashed) return Result.failure("Internal server error",500);
+
+    
+    const userPasswordUpdated =await this.userRepositorySequelize.changePassword(userId,changePasswordDto);
+
+    if(userPasswordUpdated)  return Result.succes(userPasswordUpdated,200);
+
+    return Result.failure("Internal server error",500)
+
+  }
+
+  async sendEmailResetPassword(userId:string){
+    const user = await this.userRepositorySequelize.getUserById(userId);
+
+    if(!user)return Result.failure("User not found",404)
+
+    
   }
 }
