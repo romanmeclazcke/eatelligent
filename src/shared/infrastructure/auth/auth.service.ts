@@ -14,14 +14,15 @@ export class AuthService{
         return Result.succes("Error to hash password",500);
     }
 
-    async comparePassword(password:string, passwordHashed:string):Promise<Result<Boolean>>{
+    async comparePassword(password: string, passwordHashed: string): Promise<Result<boolean>> {
         const passwordCompare = await bcrypt.compare(password, passwordHashed);
-
-        if(passwordCompare){
-            return Result.succes(true,200);
+    
+        if (passwordCompare) {
+            return Result.succes(true, 200); // Devuelve un Result con éxito y el valor booleano
         }
-        return Result.failure("password most be the same", 400)
+        return Result.failure("Passwords do not match", 400); // Devuelve un Result con fallo
     }
+    
 
 
 }
