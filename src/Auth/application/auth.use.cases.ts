@@ -101,11 +101,13 @@ export class authUseCases {
     const user =  await this.userRepositorySequelize.getUserById(userId);
 
     if(!user)return Result.failure("User not found",404)
+  
+    const isValidPasswordResult = await this.authService.comparePassword(changePasswordDto.oldPassword, user.password);
 
-    const isValidPassword = await this.authService.comparePassword(changePasswordDto.oldPassword,user.password);
-
-    if(!isValidPassword) return Result.failure("Invalid password",500);
-
+    if (!isValidPasswordResult.isSucces || !isValidPasswordResult.value) {
+        return Result.failure("Invalid password", 500);
+    }
+    
     if(changePasswordDto.newPassword!=changePasswordDto.confirmPassword) return Result.failure("new password most be the same",404)
 
     const newPasswordHashed= await this.authService.hashPassword(changePasswordDto.newPassword)
@@ -113,7 +115,7 @@ export class authUseCases {
     if(!newPasswordHashed) return Result.failure("Internal server error",500);
 
     
-    const userPasswordUpdated =await this.userRepositorySequelize.changePassword(userId,changePasswordDto);
+    const userPasswordUpdated =await this.userRepositorySequelize.changePassword(userId,newPasswordHashed.value);
 
     if(userPasswordUpdated)  return Result.succes(userPasswordUpdated,200);
 
