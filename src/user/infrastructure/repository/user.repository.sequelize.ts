@@ -23,6 +23,7 @@ export class userRepositorySequelize implements userRepository {
         'userName',
         'profilePicture',
         'validateEmail',
+        'password'
       ],
     });
   }
@@ -120,9 +121,9 @@ export class userRepositorySequelize implements userRepository {
     return result;
   }
 
-   async changePassword(userId: string, changePasswordDto: changePasswordDto): Promise<UserEntity | null> {
+   async changePassword(userId: string, newPasswordHashed: String): Promise<UserEntity | null> {
        await User.update(
-        { password: changePasswordDto.newPassword},{
+        { password: newPasswordHashed},{
         where:{
           id: userId
         }
