@@ -1,12 +1,12 @@
 import { IsIn, IsOptional, IsString, Validate, validate } from "class-validator";
-import { IsValidFieldMeals } from "./meal.is.valid.field";
+import { IsValidFieldMeals } from "../valiators/meal.is.valid.field";
 import { mealEntity } from "../meal.entity";
 
 export class mealOrderParams {
     @IsOptional()
     @IsString()
     @Validate(IsValidFieldMeals)
-    sort?: keyof mealEntity; // Asegúrate de que esto esté correcto
+    sort?: keyof mealEntity; 
 
 
     @IsOptional()
