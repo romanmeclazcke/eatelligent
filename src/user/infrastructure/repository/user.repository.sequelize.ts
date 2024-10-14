@@ -23,7 +23,8 @@ export class userRepositorySequelize implements userRepository {
         'userName',
         'profilePicture',
         'validateEmail',
-        'password'
+        'password',
+        'email'
       ],
     });
   }
