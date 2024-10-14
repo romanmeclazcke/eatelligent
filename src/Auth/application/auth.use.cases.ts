@@ -125,7 +125,7 @@ export class authUseCases {
 
   }
 
-  async sendEmailResetPassword(userId: string):Promise<Result<boolean>> {
+  async sendEmailResetPassword(userId: string): Promise<Result<boolean>> {
     const user = await this.userRepositorySequelize.getUserById(userId);
 
     if (!user) return Result.failure("User not found", 404)
@@ -142,7 +142,7 @@ export class authUseCases {
   }
 
 
-  async  resetPassword(token: string, resetPasswordDto:resetPasswordDto):Promise<Result<boolean>> {
+  async resetPassword(token: string, resetPasswordDto: resetPasswordDto): Promise<Result<boolean>> {
     if (!token)
       return Result.failure('Token is required to reset password', 500);
 
@@ -159,13 +159,13 @@ export class authUseCases {
 
     if (!user) return Result.failure('User not found', 404);
 
-    if(resetPasswordDto.newPassword!=resetPasswordDto.confirmPassword){
+    if (resetPasswordDto.newPassword != resetPasswordDto.confirmPassword) {
       return Result.failure("new password and confirm password most be the same", 404);
     }
-    
+
     const passwordHashed = await this.authService.hashPassword(resetPasswordDto.newPassword);
 
-    if(!passwordHashed.isSucces) return Result.failure("Error to hash password",500)
+    if (!passwordHashed.isSucces) return Result.failure("Error to hash password", 500)
 
     const passwordReseted = await this.authRepository.resetPassword(user.id, passwordHashed.value);
 
