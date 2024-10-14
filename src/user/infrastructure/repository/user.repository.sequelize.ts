@@ -6,9 +6,11 @@ import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 import { UpdateUserDto } from 'src/user/domian/dto/user.update';
 import Follow from 'src/Follow/infrastructure/model/follow.model';
 import { Op, Sequelize } from 'sequelize';
+import { changePasswordDto } from 'src/Auth/domain/dto/change.password.dto';
 
 @Injectable()
 export class userRepositorySequelize implements userRepository {
+
   async getUsers(): Promise<UserEntity[] | null> {
     return await User.findAll();
   }
@@ -21,6 +23,8 @@ export class userRepositorySequelize implements userRepository {
         'userName',
         'profilePicture',
         'validateEmail',
+        'password',
+        'email'
       ],
     });
   }
@@ -82,40 +86,50 @@ export class userRepositorySequelize implements userRepository {
   }
 
   async getRecomendationUsers(userId: string): Promise<UserEntity[] | null> {
-   //traigo todos los usuarios que sigo
+    //traigo todos los usuarios que sigo
     const followedUsers = await Follow.findAll({
       where: {
         followerId: userId,
       },
       attributes: ['followedId'],
     });
-    
+
     //extraigo el id de los resultados
     const followedIds = followedUsers.map((f) => f.followedId);
     console.log(followedIds);
-   
 
-    const seguiresSegudiosPorMisSeguidos =await Follow.findAll({ //refactorizar esto
-        where:{
-            followerId:{
-                [Op.in]:followedIds
-            }
+
+    const seguiresSegudiosPorMisSeguidos = await Follow.findAll({ //refactorizar esto
+      where: {
+        followerId: {
+          [Op.in]: followedIds
         }
+      }
     })
     const test = seguiresSegudiosPorMisSeguidos.map((f) => f.followedId);
-    console.log("Estos son los usuarios que tus usuarios seguidos siguen",test);
+    console.log("Estos son los usuarios que tus usuarios seguidos siguen", test);
 
     const result = await User.findAll({ //traigo todos los usuarios que su id esta en la lista de usuarios que mis seguidos siguen
-        where: {
-          id: {
-            [Op.in]: test
-          }
-        },
-        attributes: ['id', 'username', 'profilePicture'], // Atributos del usuario
-      });
-      
+      where: {
+        id: {
+          [Op.in]: test
+        }
+      },
+      attributes: ['id', 'username', 'profilePicture'], // Atributos del usuario
+    });
+
     console.log(result);
     return result;
-}
+  }
+
+   async changePassword(userId: string, newPasswordHashed: String): Promise<UserEntity | null> {
+       await User.update(
+        { password: newPasswordHashed},{
+        where:{
+          id: userId
+        }
+      })
+      return this.getUserById(userId);
+  }
 
 }

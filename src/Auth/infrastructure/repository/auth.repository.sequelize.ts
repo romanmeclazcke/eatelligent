@@ -13,11 +13,21 @@ export class authRepositorySequelize implements authRepository {
     });
   }
 
-  async validateAccount(id: string): Promise<boolean | null> {
+  async validateAccount(userId: string): Promise<boolean | null> {
     const userUpdated = await User.update(
       { validateEmail: true },
       {
-        where: { id: id },
+        where: { id: userId },
+      },
+    );
+    return userUpdated[0] > 0;
+  }
+
+  async resetPassword(userId:string, newPassword:string):Promise<boolean|null>{
+    const userUpdated = await User.update(
+      { password: newPassword },
+      {
+        where: { id: userId },
       },
     );
     return userUpdated[0] > 0;
