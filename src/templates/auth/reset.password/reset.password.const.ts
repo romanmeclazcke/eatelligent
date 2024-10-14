@@ -1,0 +1,2 @@
+export const CONST_RESET_PASSWORD_SUBJECT=''
+export const CONST_RESET_PASSWORD_TEXT=''
