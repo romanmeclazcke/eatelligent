@@ -1,5 +1,5 @@
 import { IsIn, IsOptional, IsString, Validate, validate } from "class-validator";
-import { IsValidFieldMeals } from "../valiators/meal.is.valid.field";
+import { IsValidFieldMeals } from "../validator/meal.is.valid.field";
 import { mealEntity } from "../meal.entity";
 
 export class mealOrderParams {
