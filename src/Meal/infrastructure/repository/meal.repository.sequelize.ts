@@ -8,13 +8,23 @@ import Product from "src/Product/infrastructure/model/product.model";
 import DislikeProduct from "src/DislikeProduct/infrastructure/model/dislike.product.model";
 import { Op } from 'sequelize';
 import { sequelize } from "src/Shared/infrastructure/db/db.sequelize.config";
+import { mealOrderParams } from "src/Meal/domain/dto/meal.order.params.dto";
 
 @Injectable()
 export class mealRepositorySequelize implements mealRepository{
 
-    async getMeals(): Promise<mealEntity[] | null> {
-        return  await Meal.findAll();
-    }
+    async getMeals(mealOrderParams: mealOrderParams): Promise<mealEntity[] | null> {
+        const options: any = {};
+
+        // applied order if exist
+        if (mealOrderParams.sort) {
+          options.order = [[mealOrderParams.sort, mealOrderParams.order || 'asc']]; //['field','order']
+        }
+    
+        const meals = await Meal.findAll(options); //if dont exist order will response normal
+    
+        return meals;
+      }
 
     async getMealsByTastes(userId: string): Promise<mealEntity[] | null> {
         const dislikeProducts = await DislikeProduct.findAll({
