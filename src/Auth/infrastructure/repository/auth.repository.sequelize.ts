@@ -1,7 +1,6 @@
 import { where } from 'sequelize';
 import { authRepository } from 'src/Auth/domain/authRepository';
 import { loginDto } from 'src/Auth/domain/dto/login.dto';
-import { resetPasswordDto } from 'src/Auth/domain/dto/reset.password.dto';
 import { UserEntity } from 'src/user/domian/user.entity';
 import User from 'src/user/infrastructure/models/user.models';
 
