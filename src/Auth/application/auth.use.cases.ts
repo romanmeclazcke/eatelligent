@@ -56,10 +56,7 @@ export class authUseCases {
         user.email,
         CONST_VERIFY_ACCOUNT_TEXT,
       );
-      return Result.failure(
-        'You need confirm you email, we send a emails, check!',
-        503,
-      );
+      return Result.failure('You need confirm you email, we send a emails, check!',503);
     }
 
     const payload = { id: user.id, name: user.name, email: user.email };
