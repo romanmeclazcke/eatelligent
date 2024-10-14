@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { authUseCases } from 'src/Auth/application/auth.use.cases';
 import { changePasswordDto } from 'src/Auth/domain/dto/change.password.dto';
 import { loginDto } from 'src/Auth/domain/dto/login.dto';
+import { resetPasswordDto } from 'src/Auth/domain/dto/reset.password.dto';
 import { Public } from 'src/Shared/infrastructure/decorators/is.public';
 
 @Controller('auth')
@@ -60,14 +61,32 @@ export class authController {
           .json({ message: result.error, details: false });
   }
 
-  @Get('/reset-password/:userId')
+  @Public()
+  @Get('send-email/reset-password/:userId')
   async sendEmailResetPassword(
-    @Query('userId') userId: string,
+    @Param('userId') userId: string,
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    console.log("entre")
     const result = await this.authUseCases.sendEmailResetPassword(userId);
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
+  }
+
+  @Public()
+  @Patch('reset-password')
+  async resetPassword(
+    @Query('token') token: string,
+    @Body() resetPasswordDto:resetPasswordDto,
+    @Req() req: Request,
+    @Res() res: Response,
+  ){
+    const result = await this.authUseCases.resetPassword(token,resetPasswordDto);
     result.isSucces
       ? res
           .status(result.statusCode)
