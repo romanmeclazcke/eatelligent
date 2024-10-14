@@ -6,6 +6,7 @@ import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
 import { Injectable } from '@nestjs/common';
+import { mealOrderParams } from '../domain/dto/meal.order.params.dto';
 
 @Injectable()
 export class mealUseCases {
@@ -16,8 +17,8 @@ export class mealUseCases {
   ) { }
   
 
-  async getMeals(): Promise<Result<mealEntity[] | null>>{
-    const meals= await this.mealRepository.getMeals();
+  async getMeals(mealOrderParams:mealOrderParams): Promise<Result<mealEntity[] | null>>{
+    const meals= await this.mealRepository.getMeals(mealOrderParams);
     
     if(meals){
       return Result.succes(meals,200);
