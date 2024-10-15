@@ -5,6 +5,7 @@ import { productUpdateDto } from '../domain/dto/product.update.dto';
 import { Result } from 'src/Shared/infrastructure/patternResult/result';
 import { productEntity } from '../domain/product.entity';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
+import { productOrderParams } from '../domain/dto/productOrderParams';
 
 @Injectable()
 export class productUseCases {
@@ -12,6 +13,14 @@ export class productUseCases {
     private productRepository: productRepositorySequelize,
     private cloudinary: CloudinaryService,
   ) {}
+
+  async getAllProducts(productOrderParams:productOrderParams):Promise<Result<productEntity[]|null>>{
+    const products= await this.productRepository.getAllProducts(productOrderParams);
+
+    if(products) return Result.succes(products,200);
+
+    return Result.failure("Products not found",404);
+  }
 
   async createProduct(  //refactorizar
     productCreateDto: productCreateDto,
