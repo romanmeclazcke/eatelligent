@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -17,10 +18,27 @@ import { productUseCases } from 'src/Product/application/product.use.cases';
 import { productCreateDto } from 'src/Product/domain/dto/product.create.dto';
 import { Request, Response } from 'express';
 import { productUpdateDto } from 'src/Product/domain/dto/product.update.dto';
+import { productOrderParams } from 'src/Product/domain/dto/productOrderParams';
 
 @Controller('product')
 export class productController {
   constructor(private productUseCases: productUseCases) {}
+
+  @Get('/show-all')
+  async showAllProducts(
+  @Query() productOrderParams:productOrderParams,
+  @Req() req: Request,
+  @Res() res: Response
+  ) {
+    const result = await this.productUseCases.getAllProducts(productOrderParams);
+    result.isSucces
+      ? res
+          .status(result.statusCode)
+          .json({ message: result.value, details: true })
+      : res
+          .status(result.statusCode)
+          .json({ message: result.error, details: false });
+  }
 
   @Post('/new')
   @UseInterceptors(FileInterceptor('productImage'))
