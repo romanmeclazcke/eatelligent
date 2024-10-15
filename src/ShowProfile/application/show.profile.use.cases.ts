@@ -9,15 +9,15 @@ import { Injectable } from '@nestjs/common';
 export class showProfileUseCases {
   constructor(private userRepository: userRepositorySequelize,private followRepository:followRepositorySequelize, private postRepository:postRepositorySequelize) {}
 
-  async showProfile(userId: string): Promise<Result<profileEntity>> {
+  async showProfile(userId: string,actualUserId:string): Promise<Result<profileEntity>> {
     const user = await this.userRepository.getUserById(userId);
 
     if (!user) return Result.failure('User not found', 404);
 
-
-    const [followStats, posts]= await Promise.all([ //reduced execution time
+    const [followStats, posts,userRecomendacion]= await Promise.all([ //reduced execution time
         this.followRepository.getFollowStats(userId),
-        this.postRepository.getPostByUser(userId)
+        this.postRepository.getPostByUser(userId),
+        this.userRepository.getRecomendationUsers(actualUserId)//get users that i dont follow and mi follows follow
     ])
 
     if(!followStats||!posts) return  Result.failure("Internal server error",500);
@@ -26,6 +26,7 @@ export class showProfileUseCases {
     id:userId, 
     user, 
     followStats: followStats,
+    userRecomendacion:userRecomendacion,
     posts:posts
     }
 

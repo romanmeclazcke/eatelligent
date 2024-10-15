@@ -6,5 +6,7 @@ export interface profileEntity{
     id:string
     user:UserEntity
     followStats:followStatsEntity
+    userRecomendacion:UserEntity[]
     posts: postEntity[]
+    
 }

@@ -4,10 +4,24 @@ import { productEntity } from "src/Product/domain/product.entity";
 import { productRepository } from "src/Product/domain/product.repository";
 import Product from "../model/product.model";
 import { Injectable } from "@nestjs/common";
+import { productOrderParams } from "src/Product/domain/dto/productOrderParams";
 
 
 @Injectable()
 export class productRepositorySequelize implements productRepository{
+
+    async getAllProducts(productOrderParams:productOrderParams): Promise<productEntity[] | null> {
+        const options: any = {};
+
+        // applied order if exist
+        if (productOrderParams.sort) {
+          options.order = [[productOrderParams.sort, productOrderParams.order || 'asc']]; //['field','order']
+        }
+    
+        const meals = await Product.findAll(options); //if dont exist order will response normal
+    
+        return meals;
+    }
     
     async createProduct(productCreatoDto: productCreateDto): Promise<productEntity | null> {
         return await Product.create({...productCreatoDto})

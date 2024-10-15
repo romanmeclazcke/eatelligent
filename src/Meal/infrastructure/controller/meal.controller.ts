@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { mealUseCases } from "src/Meal/application/meal.use.cases";
 import { Request, Response } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { mealCreateDto } from "src/Meal/domain/dto/meal.create.dto";
 import { mealUpdateDto } from "src/Meal/domain/dto/meal.update.dto";
+import { mealOrderParams } from "src/Meal/domain/dto/meal.order.params.dto";
 
 @Controller('meal')
 export class mealController{
@@ -12,10 +13,11 @@ export class mealController{
 
     @Get('show-all')
     async getMeals(
+        @Query() mealOrderParams: mealOrderParams,
         @Req() req: Request,
         @Res() res: Response,
     ){
-      const result = await this.mealUseCases.getMeals()
+      const result = await this.mealUseCases.getMeals(mealOrderParams)
       result.isSucces?
       res.status(result.statusCode).json({ message: result.value, details: true }):
       res.status(result.statusCode).json({ message: result.error, details: false });
