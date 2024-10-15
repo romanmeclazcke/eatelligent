@@ -1,5 +1,6 @@
 import { productCreateDto } from "./dto/product.create.dto";
 import { productUpdateDto } from "./dto/product.update.dto";
+import { productOrderParams } from "./dto/productOrderParams";
 import { productEntity } from "./product.entity";
 
 export interface productRepository{
@@ -8,4 +9,5 @@ export interface productRepository{
     deleteProduct(productId:string):Promise<number|null>;
     getProductByName(productName:string):Promise<productEntity|null>;
     getProductById(productId:string):Promise<productEntity|null>;
+    getAllProducts(productOrderParams:productOrderParams):Promise<productEntity[]|null>;
 }
