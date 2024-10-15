@@ -1,14 +1,13 @@
 import { IsIn, IsOptional, IsString, Validate, validate } from "class-validator";
-IsValidFieldProduct
 import { productEntity } from "../product.entity";
-import { IsValidFieldProduct } from "./validator/product.is.valid.field";
+import { IsValidFieldProduct } from "../validator/product.is.valid.field";
 
 
 export class productOrderParams {
     @IsOptional()
     @IsString()
-    @Validate(IsValidFieldMeals)
-    sort?: keyof productEntity; 
+    @Validate(IsValidFieldProduct)
+    sort?: keyof productEntity; //only allow product attribute
 
 
     @IsOptional()
