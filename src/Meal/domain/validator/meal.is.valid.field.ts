@@ -1,5 +1,8 @@
-import { ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
-import { mealEntity } from "../meal.entity";
+import {
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
+import { mealEntity } from '../meal.entity';
 
 const validFields: (keyof mealEntity)[] = [
   'id',

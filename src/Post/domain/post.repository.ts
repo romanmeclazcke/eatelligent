@@ -13,6 +13,7 @@ export interface postRepository{
     createPost(userId:string,postCreateDto:postCreateDto):Promise<postEntity|null>;
     editPost(userId:string,id:string,postUpdateDto:postUpdateDto,file: Express.Multer.File):Promise<postEntity|null>
     deletePost(userId:string,id:string):Promise<number|null>
+    getRelevanPost(actualUserId:string):Promise<postEntity[]|null>
     
 
 }

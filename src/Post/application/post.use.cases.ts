@@ -14,7 +14,7 @@ export class postUsesCases {
     private postRepository: postRepositorySequelize,
     private cloudinary: CloudinaryService,
     private userRepository: userRepositorySequelize,
-    private badWordsServices : badWordsService,
+    private badWordsServices: badWordsService,
   ) {}
 
   async getPostsFromUsersIFollow(
@@ -67,16 +67,20 @@ export class postUsesCases {
     if (!user) {
       return Result.failure('User not found', 404);
     }
-    
-    if(postCreateDto.description){
-        if(await this.badWordsServices.detectBadWords(postCreateDto.description)){
-          return Result.failure("Post contain bad words",404);
-        }  
+
+    if (postCreateDto.description) {
+      if (
+        await this.badWordsServices.detectBadWords(postCreateDto.description)
+      ) {
+        return Result.failure('Post contain bad words', 404);
+      }
     }
 
-    const postPictureUrl = await this.cloudinary.handlePictures(file, "post");
-    if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
-    if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
+    const postPictureUrl = await this.cloudinary.handlePictures(file, 'post');
+    if (postPictureUrl === 'prohibited')
+      return Result.failure('Prohibited content', 400);
+    if (postPictureUrl === 'uploadError')
+      return Result.failure('Failed to upload image', 500);
 
     const postToCreate: postCreateDto = {
       ...postCreateDto,
@@ -104,16 +108,20 @@ export class postUsesCases {
       return Result.failure('User not found', 404);
     }
 
-    const {image: oldImgeUrl}= await this.postRepository.getPostById(id);
-    
-    if(postUpdateDto.description){
-      if(await this.badWordsServices.detectBadWords(postUpdateDto.description)){
-        return Result.failure("Post contain bad words",404);
-      }  
+    const { image: oldImgeUrl } = await this.postRepository.getPostById(id);
+
+    if (postUpdateDto.description) {
+      if (
+        await this.badWordsServices.detectBadWords(postUpdateDto.description)
+      ) {
+        return Result.failure('Post contain bad words', 404);
+      }
     }
-    const postPictureUrl = await this.cloudinary.handlePictures(file,"post");
-    if (postPictureUrl === 'prohibited') return Result.failure('Prohibited content', 400);
-    if (postPictureUrl === 'uploadError') return Result.failure('Failed to upload image', 500);
+    const postPictureUrl = await this.cloudinary.handlePictures(file, 'post');
+    if (postPictureUrl === 'prohibited')
+      return Result.failure('Prohibited content', 400);
+    if (postPictureUrl === 'uploadError')
+      return Result.failure('Failed to upload image', 500);
 
     const postToUpdated: postUpdateDto = {
       ...postUpdateDto,
@@ -129,22 +137,18 @@ export class postUsesCases {
     if (!postUpdated) {
       return Result.failure('Internal server error', 500);
     }
-    if(oldImgeUrl){
+    if (oldImgeUrl) {
       console.log(this.cloudinary.deleteImage(oldImgeUrl));
     }
     return Result.succes(postUpdated, 200);
   }
 
-  async deletePost(
-    userId: string,
-    id: string,
-  ): Promise<Result<string | null>> {
+  async deletePost(userId: string, id: string): Promise<Result<string | null>> {
     const postDeleted = await this.postRepository.deletePost(userId, id);
-  
+
     if (postDeleted) {
-      return Result.succes("Post succesfully deleted", 200);
+      return Result.succes('Post succesfully deleted', 200);
     }
     return Result.failure('Internal server error', 500);
   }
-
 }
