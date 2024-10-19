@@ -5,9 +5,8 @@ import { mealCreateDto } from '../domain/dto/meal.create.dto';
 import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
-import { Inject, Injectable } from '@nestjs/common';
+import {  Injectable } from '@nestjs/common';
 import { mealOrderParams } from '../domain/dto/meal.order.params.dto';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class mealUseCases {
@@ -15,7 +14,6 @@ export class mealUseCases {
     private mealRepository: mealRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async getMeals(
