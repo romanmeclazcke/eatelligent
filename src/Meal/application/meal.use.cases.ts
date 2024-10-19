@@ -5,8 +5,9 @@ import { mealCreateDto } from '../domain/dto/meal.create.dto';
 import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { mealOrderParams } from '../domain/dto/meal.order.params.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class mealUseCases {
@@ -14,16 +15,17 @@ export class mealUseCases {
     private mealRepository: mealRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
-  ) { }
-  
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
-  async getMeals(mealOrderParams:mealOrderParams): Promise<Result<mealEntity[] | null>>{
-    const meals= await this.mealRepository.getMeals(mealOrderParams);
-    
-    if(meals){
-      return Result.succes(meals,200);
+  async getMeals(
+    mealOrderParams: mealOrderParams,
+  ): Promise<Result<mealEntity[] | null>> {
+    const meals = await this.mealRepository.getMeals(mealOrderParams);
+    if (meals) {
+      return Result.succes(meals, 200);
     }
-    return Result.failure("Meals not found",404)
+    return Result.failure('Meals not found', 404);
   }
 
   async getMealsByTastes(userId: string): Promise<Result<mealEntity[] | null>> {
@@ -37,14 +39,14 @@ export class mealUseCases {
     if (meals) {
       return Result.succes(meals, 200);
     }
-    return Result.failure("meals not founds", 404)
+    return Result.failure('meals not founds', 404);
   }
 
   async getMealById(mealId: string): Promise<Result<mealEntity | null>> {
     const meal = await this.mealRepository.getMealById(mealId);
 
     if (meal) {
-      return Result.succes(meal, 200)
+      return Result.succes(meal, 200);
     }
     return Result.failure('Meal not found', 404);
   }
@@ -72,28 +74,29 @@ export class mealUseCases {
   ): Promise<Result<mealEntity | null>> {
     let mealImage: string | null = null;
 
-    // if (file) {
-    //   try {
-    //     const uploadResult = await this.cloudinary.uploadImage(file);
-    //     mealImage = uploadResult.url;
-    //   } catch (uploadError) {
-    //     return Result.failure('Failed to upload image', 500);
-    //   }
-    // }
+    if (file) {
+      try {
+        const uploadResult = await this.cloudinary.uploadImage(
+          file,
+          'meal_picture',
+        );
+        mealImage = uploadResult.url;
+      } catch (uploadError) {
+        return Result.failure('Failed to upload image', 500);
+      }
+    }
 
     const mealToCreate: mealCreateDto = {
       ...mealCreateDto,
-      mealPicture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh6cOMOl7iTHblduozB1vGzuBXw4uU0iQMVw&s",
+      mealPicture: mealImage,
     };
 
-    // Aquí, `createMeals` debe crear una nueva comida y devolver la instancia creada
     const meal = await this.mealRepository.createMeal(mealToCreate);
-    console.log(meal)
+    console.log(meal);
 
     if (meal) {
-      // Si se proporcionan IDs de productos, asocia los productos con la comida
       if (mealCreateDto.productsId && mealCreateDto.productsId.length > 0) {
-        await meal.addProducts(mealCreateDto.productsId)
+        await meal.addProducts(mealCreateDto.productsId);
       }
       return Result.succes(meal, 201);
     }
@@ -101,16 +104,19 @@ export class mealUseCases {
     return Result.failure('Internal server error', 500);
   }
 
-  async updateMeal( //refactorizar todo
+  async updateMeal(
+    //refactorizar todo
     mealId: string,
     mealUpdateDto: mealUpdateDto,
     file: Express.Multer.File,
   ): Promise<Result<mealEntity | null>> {
-
     let mealImage: string | null = null;
     if (file) {
       try {
-        const uploadResult = await this.cloudinary.uploadImage(file, "meal_picture");
+        const uploadResult = await this.cloudinary.uploadImage(
+          file,
+          'meal_picture',
+        );
         mealImage = uploadResult.url;
       } catch (uploadError) {
         return Result.failure('Failed to upload image', 500);
@@ -129,6 +135,5 @@ export class mealUseCases {
     }
 
     return Result.failure('Internal srever error', 500);
-
   }
 }

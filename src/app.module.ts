@@ -12,6 +12,7 @@ import { FavoriteMealModule } from './FavoriteMeal/favorite.meal.module';
 import { AuthModule } from './Auth/auth.module';
 import { MealHistoryModule } from './MealHistory/history.meal.module';
 import { ShowProfileModule } from './ShowProfile/show.profile.module';
+import { ShowHomeModule } from './ShowHome/show.home.module';
 @Module({
   imports: [
     UserModule,
@@ -26,7 +27,8 @@ import { ShowProfileModule } from './ShowProfile/show.profile.module';
     FavoriteMealModule,
     AuthModule,
     MealHistoryModule,
-    ShowProfileModule
+    ShowProfileModule, 
+    ShowHomeModule
   ],
   controllers: [],
   providers: [],

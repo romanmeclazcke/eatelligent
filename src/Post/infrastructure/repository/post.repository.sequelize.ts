@@ -28,20 +28,20 @@ export class postRepositorySequelize implements postRepository {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'name','profilePicture'],
-        },{   //to each post included all comments 
+          attributes: ['id', 'name', 'profilePicture'],
+        }, {   //to each post included all comments 
           model: Comment,
-          as:'comments',
-          attributes:['id','comment','status','commentedAt',],
+          as: 'comments',
+          attributes: ['id', 'comment', 'status', 'commentedAt',],
           include: [ // to each comment included user information
             {
               model: User,
               as: 'userCommentedPost',
-              attributes: ['id','userName','profilePicture'], 
+              attributes: ['id', 'userName', 'profilePicture'],
             },
           ],
-          order:[['commentedAt','DESC']]
-          
+          order: [['commentedAt', 'DESC']]
+
         }
       ], attributes: [
         'id',
@@ -54,7 +54,7 @@ export class postRepositorySequelize implements postRepository {
             SELECT COUNT(*)
             FROM \`Like\`
             WHERE \`Like\`.postId = Post.id 
-          )`),
+            )`),
           'likeCount',
         ],
       ],
@@ -71,7 +71,7 @@ export class postRepositorySequelize implements postRepository {
       where: {
         userId: userId,
       },
-      attributes:[
+      attributes: [
         'id',
         'description',
         'image',
@@ -79,10 +79,10 @@ export class postRepositorySequelize implements postRepository {
         'updatedAt',
         [
           sequelize.literal(`( 
-            SELECT COUNT(*)
-            FROM \`Like\`
-            WHERE \`Like\`.postId = Post.id 
-          )`),
+              SELECT COUNT(*)
+              FROM \`Like\`
+              WHERE \`Like\`.postId = Post.id 
+              )`),
           'likeCount',
         ],
       ]
@@ -146,4 +146,56 @@ export class postRepositorySequelize implements postRepository {
       },
     });
   }
+  async getRelevanPost(actualUserId: string): Promise<postEntity[] | null> {
+    return await Post.findAll({
+      include: [ //include model user to recived name id and profile picture
+        {
+          model: User,
+          as: 'author',
+          attributes: ['id', 'name', 'profilePicture'],
+        }, {   //to each post included all comments 
+          model: Comment,
+          as: 'comments',
+          attributes: ['id', 'comment', 'status', 'commentedAt',],
+          include: [ // to each comment included user information
+            {
+              model: User,
+              as: 'userCommentedPost',
+              attributes: ['id', 'userName', 'profilePicture'],
+            },
+          ],
+          order: [['commentedAt', 'DESC']]
+
+        }
+      ],attributes: [
+        'id',
+        'description',
+        'image',
+        'createdAt',
+        'updatedAt',
+        [
+          sequelize.literal(`( 
+              SELECT COUNT(*)
+              FROM \`Like\`
+              WHERE \`Like\`.postId = Post.id 
+              )`),
+          'likeCount',
+        ],
+      ],
+      where: sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM \`Like\`
+            WHERE \`Like\`.postId = Post.id
+          ) > 20
+          AND Post.userId NOT IN (
+            SELECT followedId
+            FROM \`Follow\`
+            WHERE followerId = :actualUserId
+          )`),
+      order: [[sequelize.literal('likeCount'), 'DESC']], // Ordenar por el número de likes
+      replacements: { actualUserId } // Usamos un parámetro bind seguro para evitar inyección SQL
+    });
+  }
+
+
 }
