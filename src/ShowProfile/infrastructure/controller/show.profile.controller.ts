@@ -6,9 +6,11 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { showProfileUseCases } from 'src/ShowProfile/application/show.profile.use.cases';
 
+@ApiTags('show-profile')
 @Controller('show-profile')
 export class showProfileController {
   constructor(private showProfileUseCases: showProfileUseCases) {}

@@ -9,16 +9,19 @@ import {
   Req,
   Res,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Public } from 'src/Shared/infrastructure/decorators/is.public';
 import { userUseCases } from 'src/user/application/user.use.cases';
 import { CreateUserDto } from 'src/user/domian/dto/create.user.dto';
 import { UpdateUserDto } from 'src/user/domian/dto/user.update';
+import User from '../models/user.models';
 
+
+@ApiTags('user')
 @Controller('user')
 export class userController {
   constructor(private userUseCase: userUseCases) {}
@@ -55,6 +58,7 @@ export class userController {
   @Post('/new')
   @Public()
   @UseInterceptors(FileInterceptor('profilePicture')) // 'profilePicture' es el nombre del campo de archivo que recibo
+  @ApiResponse({status:201, description:"Product Was Created", type: User})
   async createUser(
     @Body() createUserDto: CreateUserDto,
     @UploadedFile() file: Express.Multer.File, //recibo el archivo subido

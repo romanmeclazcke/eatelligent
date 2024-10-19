@@ -1,6 +1,8 @@
 import { Controller, Get, Param, ParseUUIDPipe, Req, Res } from "@nestjs/common";
 import { showHomeUseCases } from "src/ShowHome/application/show.home.use.cases";
 import { Request,Response } from "express";
+import { ApiTags } from "@nestjs/swagger";
+@ApiTags('home')
 @Controller('home')
 export class showHomeController {
 

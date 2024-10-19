@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { authUseCases } from 'src/Auth/application/auth.use.cases';
 import { changePasswordDto } from 'src/Auth/domain/dto/change.password.dto';
@@ -6,6 +7,7 @@ import { loginDto } from 'src/Auth/domain/dto/login.dto';
 import { resetPasswordDto } from 'src/Auth/domain/dto/reset.password.dto';
 import { Public } from 'src/Shared/infrastructure/decorators/is.public';
 
+@ApiTags('auth')
 @Controller('auth')
 export class authController {
   constructor(private authUseCases: authUseCases) {}

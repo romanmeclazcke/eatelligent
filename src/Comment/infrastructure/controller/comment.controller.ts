@@ -2,9 +2,10 @@ import { Body, Controller, Delete, Param, ParseUUIDPipe, Patch, Post, Req, Res }
 import { commentUseCases } from "src/Comment/application/comment.use.cases";
 import { commentCreateDto } from "src/Comment/domain/dto/comment.create.dto";
 import { Request, Response } from "express";
-import path from "path";
 import { commentUpdateDto } from "src/Comment/domain/dto/comment.update.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('comment')
 @Controller('comment')
 export class commentController{
 

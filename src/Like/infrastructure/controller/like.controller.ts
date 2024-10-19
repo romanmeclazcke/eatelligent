@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { likeUseCases } from 'src/Like/application/like.use.cases';
 import { Request, Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('like')
 @Controller('like')
 export class likeController {
   constructor(private likeUseCases: likeUseCases) {}

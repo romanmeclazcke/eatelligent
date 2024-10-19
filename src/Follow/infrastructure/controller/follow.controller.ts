@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { followUseCases } from 'src/Follow/application/follow.use.cases';
 import { Request, Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('follow')
 @Controller('follow')
 export class followController {
   constructor(private followUseCases: followUseCases) {}

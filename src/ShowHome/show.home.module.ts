@@ -3,11 +3,12 @@ import { userRepositorySequelize } from 'src/user/infrastructure/repository/user
 import { postRepositorySequelize } from 'src/Post/infrastructure/repository/post.repository.sequelize';
 import { followRepositorySequelize } from 'src/Follow/infrastructure/repository/follow.repository.sequelize';
 import { showHomeController } from './infrastructure/controller/show.home.controller';
+import { showHomeUseCases } from './application/show.home.use.cases';
 
 
 @Module({
   controllers: [showHomeController],
-  providers:[userRepositorySequelize,postRepositorySequelize, followRepositorySequelize],
+  providers:[showHomeUseCases,userRepositorySequelize,postRepositorySequelize, followRepositorySequelize],
   exports:[],
   imports:[]
 })
