@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AuthGuardJwt } from './Shared/infrastructure/guards/auth.guard.jwt';
 import { JwtService } from '@nestjs/jwt';
 import { userRepositorySequelize } from './user/infrastructure/repository/user.repository.sequelize';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   syncDatabase();
@@ -18,6 +19,14 @@ async function bootstrap() {
       forbidNonWhitelisted:true //no acepta peticiones con propiedaes que no necesita
     })
   )
+
+  const config = new DocumentBuilder()
+    .setTitle('EatElligent')
+    .setDescription('Documentation about eatelligent')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
 
   app.setGlobalPrefix('api')
 
