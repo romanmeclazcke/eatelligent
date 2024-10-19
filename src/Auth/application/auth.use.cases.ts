@@ -77,7 +77,7 @@ export class authUseCases {
 
 
     if (!payload.email)
-      return Result.failure('Emails is necesary to verify account', 404);
+      return Result.failure('Invalid format token', 404);
 
     const user = await this.userRepositorySequelize.getUserByEmail(
       payload.email,
@@ -122,7 +122,7 @@ export class authUseCases {
 
   }
 
-  async sendEmailResetPassword(userId: string): Promise<Result<boolean>> {
+  async sendEmailResetPassword(userId: string): Promise<Result<String>> {
     const user = await this.userRepositorySequelize.getUserById(userId);
 
     if (!user) return Result.failure("User not found", 404)
@@ -135,11 +135,11 @@ export class authUseCases {
       user.email,
       CONST_RESET_PASSWORD_TEXT,
     );
-    return Result.succes(true, 200);
+    return Result.succes("Email sended", 200);
   }
 
 
-  async resetPassword(token: string, resetPasswordDto: resetPasswordDto): Promise<Result<boolean>> {
+  async resetPassword(token: string, resetPasswordDto: resetPasswordDto): Promise<Result<String>> {
     if (!token)
       return Result.failure('Token is required to reset password', 500);
 
@@ -168,7 +168,7 @@ export class authUseCases {
 
     if (!passwordReseted) return Result.failure('Error to validate account', 500);
 
-    return Result.succes(true, 200);
+    return Result.succes("Password reset succesfully", 200);
 
   }
 
