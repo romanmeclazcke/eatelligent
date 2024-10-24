@@ -1,4 +1,4 @@
-export const VERIFY_ACCOUNT = (username: string,token:string) => `
+export const VERIFY_ACCOUNT = (username: string, token: string) => `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,6 +47,17 @@ export const VERIFY_ACCOUNT = (username: string,token:string) => `
             font-size: 12px;
             color: #888;
         }
+        span {
+        color: blue; /* Color típico de los enlaces */
+        text-decoration: underline; /* Añade subrayado */
+        cursor: pointer; /* Cambia el cursor al de "mano" */
+        }
+
+        span:hover {
+        color: darkblue; /* Color al pasar el ratón, opcional */
+        text-decoration: none; /* Quita el subrayado al pasar el ratón, opcional */
+        }
+        
     </style>
 </head>
 <body>
@@ -58,7 +69,8 @@ export const VERIFY_ACCOUNT = (username: string,token:string) => `
         <div class="content">
             <p>¡Hola, ${username}!</p>
             <p>Gracias por registrarte. Por favor, haz clic en el botón de abajo para verificar tu cuenta de correo electrónico:</p>
-            <a href="${process.env.URL_CONFIRM_ACCOUNT}?token=${token}" class="button">Verificar Cuenta</a>
+            <span onclick="window.location.href='${process.env.URL_CONFIRM_ACCOUNT}?token=${token}';" style="cursor: pointer;">Ir a Ejemplo</span>
+
         </div>
         <div class="footer">
             <p>Si no creaste esta cuenta, puedes ignorar este correo.</p>
