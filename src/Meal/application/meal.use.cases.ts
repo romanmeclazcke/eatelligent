@@ -8,7 +8,7 @@ import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudina
 import {  Inject, Injectable } from '@nestjs/common';
 import { mealOrderParams } from '../domain/dto/meal.order.params.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager'; // Usar la interfaz correcta
+import { Cache } from 'cache-manager'; 
 
 @Injectable()
 export class mealUseCases {
@@ -16,7 +16,7 @@ export class mealUseCases {
     private mealRepository: mealRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache // Cambia a la interfaz correcta
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   async getMeals(
@@ -30,7 +30,7 @@ export class mealUseCases {
 
     const meals = await this.mealRepository.getMeals(mealOrderParams);
     if (meals) {
-      await this.cacheManager.set('allMeals', meals); // Agregar await
+      await this.cacheManager.set('allMeals', meals); 
       return Result.succes(meals, 200);
     }
     return Result.failure('Meals not found', 404);
