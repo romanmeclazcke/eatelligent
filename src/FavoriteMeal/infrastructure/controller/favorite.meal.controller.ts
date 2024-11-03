@@ -8,9 +8,11 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { favoriteMealUseCases } from 'src/FavoriteMeal/application/favorite.meal.use.cases';
 
+@ApiTags('favorite-meal')
 @Controller('favorite-meals')
 export class favoriteMealsController {
   constructor(private favoriteMealUseCases: favoriteMealUseCases) {}

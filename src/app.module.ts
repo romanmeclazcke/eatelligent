@@ -13,6 +13,7 @@ import { AuthModule } from './Auth/auth.module';
 import { MealHistoryModule } from './MealHistory/history.meal.module';
 import { ShowProfileModule } from './ShowProfile/show.profile.module';
 import { ShowHomeModule } from './ShowHome/show.home.module';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
     UserModule,
@@ -28,7 +29,12 @@ import { ShowHomeModule } from './ShowHome/show.home.module';
     AuthModule,
     MealHistoryModule,
     ShowProfileModule, 
-    ShowHomeModule
+    ShowHomeModule,
+    CacheModule.register({
+      ttl: 500000,
+      max: 10,
+      isGlobal: true, // Global configuration
+    }),
   ],
   controllers: [],
   providers: [],

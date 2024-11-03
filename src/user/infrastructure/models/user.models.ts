@@ -1,16 +1,31 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from 'src/Shared/infrastructure/db/db.sequelize.config';
 
 class User extends Model {
+  @ApiProperty({
+    example:'bf2a5a6c-a14f-4541-a173-6a6f0583681e',
+    description:'User id',
+    uniqueItems:true
+  })
   declare id: string;
+  @ApiProperty()
   declare name: string;
+  @ApiProperty()
   declare lastName: string;
+  @ApiProperty()
   declare email: string;
+  @ApiProperty()
   declare password: string;
+  @ApiProperty()
   declare birthdate: Date;
+  @ApiProperty()
   declare userName: string;
+  @ApiProperty()
   declare biography?: string;
+  @ApiProperty()
   declare profilePicture?: string;
+  @ApiProperty()
   declare validateEmail:boolean
 }
 

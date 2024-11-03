@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { dislikeProductUseCases } from 'src/DislikeProduct/application/dislike.product.use.cases';
 import { Request, Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('dislike-product')
 @Controller('dislike-product')
 export class dislikeProductController {
   constructor(

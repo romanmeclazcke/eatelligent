@@ -8,10 +8,11 @@ import {
   Res,
 
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request , Response} from 'express';
 import { mealHistoryUseCases } from 'src/MealHistory/application/meal.history.use.cases';
 
-
+@ApiTags('history-meal')
 @Controller('history-meal')
 export class mealHistoryController {
     constructor(private historyMealUseCases: mealHistoryUseCases){}

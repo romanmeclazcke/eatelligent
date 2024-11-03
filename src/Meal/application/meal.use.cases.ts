@@ -5,9 +5,10 @@ import { mealCreateDto } from '../domain/dto/meal.create.dto';
 import { mealUpdateDto } from '../domain/dto/meal.update.dto';
 import { userRepositorySequelize } from 'src/user/infrastructure/repository/user.repository.sequelize';
 import { CloudinaryService } from 'src/Shared/infrastructure/cloudinary/cloudinary.service';
-import { Inject, Injectable } from '@nestjs/common';
+import {  Inject, Injectable } from '@nestjs/common';
 import { mealOrderParams } from '../domain/dto/meal.order.params.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager'; // Usar la interfaz correcta
 
 @Injectable()
 export class mealUseCases {
@@ -15,14 +16,21 @@ export class mealUseCases {
     private mealRepository: mealRepositorySequelize,
     private userRepository: userRepositorySequelize,
     private cloudinary: CloudinaryService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache // Cambia a la interfaz correcta
   ) {}
 
   async getMeals(
     mealOrderParams: mealOrderParams,
   ): Promise<Result<mealEntity[] | null>> {
+    const mealsCatched = await this.cacheManager.get<mealEntity[]>('allMeals');
+
+    if (mealsCatched) {
+      return Result.succes(mealsCatched, 200);
+    }
+
     const meals = await this.mealRepository.getMeals(mealOrderParams);
     if (meals) {
+      await this.cacheManager.set('allMeals', meals); // Agregar await
       return Result.succes(meals, 200);
     }
     return Result.failure('Meals not found', 404);

@@ -19,7 +19,9 @@ import { productCreateDto } from 'src/Product/domain/dto/product.create.dto';
 import { Request, Response } from 'express';
 import { productUpdateDto } from 'src/Product/domain/dto/product.update.dto';
 import { productOrderParams } from 'src/Product/domain/dto/productOrderParams';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('product')
 @Controller('product')
 export class productController {
   constructor(private productUseCases: productUseCases) {}

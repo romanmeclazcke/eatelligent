@@ -13,11 +13,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { postUsesCases } from 'src/Post/application/post.use.cases';
 import { postCreateDto } from 'src/Post/domain/dto/post.create.dto';
 import { postUpdateDto } from 'src/Post/domain/dto/post.update.dto';
 
+@ApiTags('post')
 @Controller('post')
 export class postController {
   constructor(private postUseCases: postUsesCases) {}
