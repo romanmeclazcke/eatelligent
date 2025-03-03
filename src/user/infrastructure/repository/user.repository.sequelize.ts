@@ -107,7 +107,6 @@ export class userRepositorySequelize implements userRepository {
       }
     })
     const test = seguiresSegudiosPorMisSeguidos.map((f) => f.followedId);
-    console.log("Estos son los usuarios que tus usuarios seguidos siguen", test);
 
     const result = await User.findAll({ //traigo todos los usuarios que su id esta en la lista de usuarios que mis seguidos siguen
       where: {
