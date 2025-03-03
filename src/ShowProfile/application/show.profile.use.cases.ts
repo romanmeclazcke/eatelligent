@@ -14,7 +14,7 @@ export class showProfileUseCases {
 
     if (!user) return Result.failure('User not found', 404);
 
-    const [followStats, posts,userRecomendacion]= await Promise.all([ //reduced execution time
+    const [followStats, posts,userRecomendacion]= await Promise.all([ 
         this.followRepository.getFollowStats(userId),
         this.postRepository.getPostByUser(userId),
         this.userRepository.getRecomendationUsers(actualUserId)//get users that i dont follow and mi follows follow
