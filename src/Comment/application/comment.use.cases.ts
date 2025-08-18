@@ -79,6 +79,8 @@ export class commentUseCases {
 
     if (badWordsResult) {
       //aplciar la traduccion de ingles a español
+
+      const dog = "String"
       return Result.failure('Comment contains bad words', 400);
     }
     const commentUpdated = await this.commentRepository.updateComment(
